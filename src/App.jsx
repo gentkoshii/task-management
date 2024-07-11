@@ -1,15 +1,12 @@
-import './App.css'
+import React from 'react'
 import Homepage from './pages/Homepage.jsx'
-import AboutUs from './pages/AboutUs.jsx'
-function App() {
 
+const App = () => {
   return (
-   <div>
+    <div>
       <Homepage />
-      <AboutUs />
-   </div>
+    </div>
   )
 }
 
 export default App
- 
