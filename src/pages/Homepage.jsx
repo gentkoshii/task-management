@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Questions from '../assets/Question.jsx';
 import './Homepage.scss';
 
 const Homepage = () => {
@@ -57,11 +58,7 @@ const Homepage = () => {
             </div>
 
             <div className="faq">
-                <h1>Most Frequently Asked Questions!</h1>
-                <div className="question">
-                    <h3>{}<span>+</span></h3>
-                    <p>{}</p>
-                </div>
+                <Questions />
             </div>
 
             <div className="support-section">
