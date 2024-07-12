@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import Questions from '../assets/Question.jsx';
+import Questions from '../assets/Homepage/Question.jsx';
+import CardFeatures from "../assets/Homepage/cardFeatures.jsx";
 import './Homepage.scss';
 
 const Homepage = () => {
@@ -22,12 +23,7 @@ const Homepage = () => {
                     <h3>Efficiently organize and prioritize your tasks with ease.</h3>
                 </div>
                 <div className="features-card">
-                    <div className="card">
-                        <img src="" alt="icon" />
-                        <h3>{}</h3>
-                        <p>{}</p>
-                        <Link to="/features"><button>Get It Now</button></Link>
-                    </div>
+                    <CardFeatures />
                 </div>
             </div>
 
@@ -63,9 +59,7 @@ const Homepage = () => {
 
             <div className="support-section">
                 <h3>Do you need help? Contact our support team.</h3>
-                <p>
-                    At TaskFlow, we believe that excellent support is key to your success. Whether you're just getting started or need assistance with advanced features, our dedicated support team is here to help.
-                </p>
+                <p>At TaskFlow, we believe that excellent support is key to your success. Whether you're just getting started or need assistance with advanced features, our dedicated support team is here to help.</p>
                 <Link to="/help"><button className="need-help-button">Need Help</button></Link>
             </div>
 
