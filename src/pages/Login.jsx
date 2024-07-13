@@ -13,7 +13,7 @@ function Login() {
   };
 
   return (
-    <div className="login">
+    <div className="font-poppins">
       <div className="loginSetup">
         <form onSubmit={handleSubmit}>
           <h2><img src="" alt="icon" />TaskFlow</h2>
