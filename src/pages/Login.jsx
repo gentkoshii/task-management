@@ -3,7 +3,7 @@ import  './Login.scss'
 
 const Login = () => {
   return (
-    <div className='font-poppins'>Login</div>
+    <div className=''>Login</div>
   )
 }
 
