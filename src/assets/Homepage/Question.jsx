@@ -15,16 +15,16 @@ const Questions = () => {
     };
   
     return (
-      <div className="">
+      <div className="flex flex-col w-full h-full gap-12">
         <h1 className="">Most Frequently Asked Questions!!</h1>
         <div>
           {questions.map((item, index) => (
-            <div key={index} className="mb-4">
-              <div className="" onClick={() => toggleAnswer(index)}>
+            <div key={index} className="mb-4 ">
+              <div className="flex justify-between" onClick={() => toggleAnswer(index)}>
                 <h3 className="">{item.question}</h3>
-                <span className="">{activeIndex === index ? '-' : '+'}</span>
+                <span className="text-2xl">{activeIndex === index ? '-' : '+'}</span>
               </div>
-              {activeIndex === index && <p className="mt-2">{item.answer}</p>}
+              {activeIndex === index && <p className="mt-2 text-lg">{item.answer}</p>}
             </div>
           ))}
         </div>

@@ -5,7 +5,7 @@ import Footer from './assets/Footer.jsx'
 
 const App = () => {
   return (
-    <div>
+    <div className='overflow-hidden'>
       <Navbar />
       <Homepage />
       <Footer />
