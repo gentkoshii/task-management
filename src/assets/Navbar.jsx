@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const handleClick = () => {};
+
 const Navbar = () => {
   return (
-      <div className='flex w-screen justify-center items-center p-[34px] bg-gray-100'>
+      <div className='flex w-screen justify-center items-center p-[34px] '>
         <div className=' w-[60%] flex justify-between items-center m-0'>
           
           <div className='flex'>
@@ -20,10 +22,11 @@ const Navbar = () => {
             <Link to="/contact" className='text-black no-underline'><h5 className='m-0'>Contact</h5></Link>
           </div>
 
-          <div className='flex gap-2'>
+          <div className='flex gap-3'>
             <input className='w-40 border-[1px] border-black rounded-md '
               type="text"
               placeholder="Search..."/>
+            <button onClick={handleClick}><img src="dark-mode.png" alt="icon" className='h-6 border-1 border-black rounded-md p-[2px]' /></button>
             <Link to="/login" className=' text-black no-underline'><h5 className='m-0'>Login</h5></Link>
           </div>
         

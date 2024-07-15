@@ -2,16 +2,25 @@ import { Link } from "react-router-dom";
 import Questions from '../assets/Homepage/Question.jsx';
 import CardFeatures from "../assets/Homepage/cardFeatures.jsx";
 
+import ImageBg from '../../public/homepage-bg.png';
+
+
 const Homepage = () => {
     const button = 'w-56 h-12 border-[1px] border-black rounded-5 text-xl text-black ';
-    const gradientStyle = {
-        background: 'radial-gradient(circle at bottom left, #FFB0B0, #FFEFE3 30%)',
-        backgroundSize: 'cover'
+    // can be used for a different style
+    // const gradientStyle = {
+    //     background: 'radial-gradient(circle at bottom left, #FFB0B0, #FFEFE3 30%)',
+    //     backgroundSize: 'cover'
+    //   };
+      const imageBg = {
+        backgroundSize: '100%',
+        backgroundImage: `url(${ImageBg})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
       };
-    
 
     return ( 
-        <div className="w-screen h-full flex flex-col items-center justify-center gap-28 pt-28 pb-28 overflow-hidden" style={gradientStyle}>
+        <div className="w-screen h-full flex flex-col items-center justify-center gap-28 pt-28 pb-28 overflow-hidden" style={imageBg}>
             
             <div className="w-[55%] h-full flex">
                 <div className="w[50%] flex flex-col gap-6">
