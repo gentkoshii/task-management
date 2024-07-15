@@ -1,16 +1,38 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import  Navbar  from "../assets/Navbar.jsx";
 
 function Login() {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login"; // Redirect to login
+  };
 
   const handleSubmit = async (e) => {
-    
+    e.preventDefault();
+    try {
+      const response = await axios.post("https://api-lazbjamuma-ez.a.run.app/api/User/login", { email: username, password });
+      console.log('response', response.data);
+
+      if (response.status === 200) {
+        const token = response.data.token; // Extracting token
+        localStorage.setItem("token", token);
+        console.log('token', token);
+        window.location.href = "/"; //Fix it to redirect to User Dashboard
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const fadeOut = 'rounded-full blur-3xl bg-[radial-gradient(_#FFDF92,_#FFF4DB_80%)] opacity-45 absolute -z-10';
   const input = 'w-72 bg-[#FFF4DB] p-2 border-solid border-black border-1 rounded-lg placeholder:bg-transparent placeholder:text-gray-800';
   const display = 'flex justify-center items-center relative ';
@@ -26,22 +48,18 @@ function Login() {
               <h2>TaskFlow</h2>
             </div>
             <h4>Log in to continue</h4>
-            <div>
             <input className={`${input}`}
               type="text"
               placeholder="example@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            </div>
-            <div>
             <input className={`${input}`}
               type="password"
               placeholder="************"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            </div>
             <input type="submit" id="loginButton" value="Log In" className=" h-10 w-24 rounded-5 bg-[#FFD56F] border-1 border-solid border-black text-xl" />
             <h4>Don't Have An Account ?</h4>
             <Link to="/signup" className="text-gray-800 no-underline "><h4>Sign Up</h4></Link>

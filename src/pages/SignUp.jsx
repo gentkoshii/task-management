@@ -1,12 +1,36 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import  Navbar  from "../assets/Navbar.jsx";
 
 function SignUp() {
+
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Sending a Post request!
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("url", {
+        email,
+        password
+      });
+      if(response.status == 200) {
+        navigate("/login")
+      } else {
+        console.error("error ")
+      }
+      // On successful sign-up, show this message!
+      console.log("Sign up successful:", response.data);
+    } catch (error) {
+      console.error("Sign up failed:", error);
+      // Displaying an error message!!
+    }
   };
 
   const fadeOut = 'rounded-full blur-3xl bg-[radial-gradient(_#FFDF92,_#FFF4DB_80%)] opacity-45 absolute -z-10';
