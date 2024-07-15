@@ -1,16 +1,18 @@
-import React from 'react'
-import Homepage from './pages/Homepage.jsx'
-import Navbar from './assets/Navbar.jsx'
-import Footer from './assets/Footer.jsx'
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from './assets/Navbar.jsx';
+import Footer from './assets/Footer.jsx';
+
+
 
 const App = () => {
   return (
     <div className='overflow-hidden'>
       <Navbar />
-      <Homepage />
+      <Outlet />  
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
