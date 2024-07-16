@@ -47,7 +47,7 @@ const Contact = () => {
                 placeholder="Enter your last name..."
                 value={formData.lastName}
                 onChange={handleChange}
-                className="w-full p-2 border border-black rounded-lg bg-custom-yellow placeholder-black"
+                className="w-full p-2 border border-black rounded-lg bg-custom-yellow placeholder-black  "
                 />
           </div>
           <div className="flex justify-between gap-4">
@@ -76,11 +76,13 @@ const Contact = () => {
               className="w-full p-2 border border-black rounded-lg bg-custom-yellow h-32 placeholder-black"
           ></textarea>
           <div className="flex justify-center items-center">
-            <button 
-              type="submit" 
-              className="w-96 p-2 border border-black rounded-lg bg-custom-yellow text-center font-bold">
-              Submit
-            </button>
+          <button 
+  type="submit" 
+  className="w-64 p-2 border border-black rounded-lg bg-custom-yellow text-center font-bold transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hover:bg-pink-180 hover:shadow-lg"
+>
+  Submit
+</button>
+
           </div>
         </form>
       </div>

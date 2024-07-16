@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 const AboutUs = () => {
     const button = 'w-56 h-12 border-[1px] border-black rounded-5 text-xl text-black';
     const gradientStyle = {
-        background: 'radial-gradient(circle at bottom left, #FFB0B0, #FFEFE3 30%)',
+        background: 'radial-gradient(circle at bottom left, #FFB0B0, #FFEFE3 60%)',
         backgroundSize: 'cover'
     };
 
@@ -13,9 +13,9 @@ const AboutUs = () => {
         <div className="w-screen h-full flex flex-col items-center justify-center gap-28 pt-28 pb-28 overflow-hidden" style={gradientStyle}>
             <div className="w-[55%] h-full flex flex-col gap-6 relative">
 
-                <div className="flex justify-between items-start w-full mb-4">
-                    <div className="flex flex-col gap-6">
-                        <h1 className="text-4xl font-bold mb-4">About TaskFlow</h1>
+                <div className="flex justify-between items-start w-full mb-9">
+                    <div className="flex flex-col gap-3">
+                        <h1 className="text-4xl font-bold mb-1">About TaskFlow</h1>
                         <p className="text-lg text-gray-700">What’s behind the boards.</p>
                     </div>
                     <div className="header-img w-[30%]">
@@ -23,7 +23,7 @@ const AboutUs = () => {
                     </div>
                 </div>
                 
-                <p className="text-4xl font-bold mb-4">
+                <p className="text-4xl font-bold mb-1">
                     The way your team works is <br />unique — so is TaskFlow.
                 </p>
                 <p className="text-gray-700">
@@ -33,18 +33,16 @@ const AboutUs = () => {
         
             </div>
 
-            <div className="w-[55%] h-full flex flex-col gap-10">
-                <h2 className="text-2xl font-bold mb-4">A Brief History of TaskFlow</h2>
+            <div className="w-[55%] h-full flex flex-col gap-2">
+                <h2 className="text-2xl font-bold mb-2">A Brief History of TaskFlow</h2>
                 <p className="text-gray-700">
                     Founded in 2023, TaskFlow emerged from the collective vision of a group of dedicated professionals who recognized the need for a more intuitive and effective task management solution. Frustrated with the complexity and limitations of existing tools, our team set out to create a platform that prioritizes user experience, flexibility, and seamless collaboration.
-                </p>
-                <p className="text-gray-700">
                     Over the years, we have continually refined and expanded our features, guided by the feedback and needs of our growing community of users. Today, TaskFlow stands as a testament to our commitment to innovation and excellence in task management.
                 </p>
             </div>
 
-            <div className="w-[55%] h-full flex flex-col gap-6">
-                <h2 className="text-2xl mb-4">Millions of people and companies of all kinds and sizes love using TaskFlow.</h2>
+            <div className="w-[55%] h-full flex flex-col gap-2">
+                <h2 className="text-2xl mb-2">Millions of people and companies of all kinds and sizes love using TaskFlow.</h2>
                 <p className="text-gray-700">
                     TaskFlow has quickly become a favorite among individuals and organizations worldwide.
                 </p>
