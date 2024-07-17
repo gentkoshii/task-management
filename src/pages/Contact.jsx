@@ -1,6 +1,7 @@
-
 import './Contact.scss';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +12,50 @@ const Contact = () => {
     message: ''
   });
 
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
+
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.message) {
+      setError('All fields are required.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3001/contacts', formData);
+    if (response.status === 201) {
+      setSuccess(true);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+      setError('');
+    }
+  } catch (error) {
+    console.error('There was an error submitting the contact information!', error);
+  }
   };
 
+  useEffect(() => {
+    if (success || error) {
+      const timer = setTimeout(() => {
+        setSuccess(false);
+        setError('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [success, error]);
+  
+  
   return (
     <div className="mx-auto p-6">
             <div className="max-w-3xl mx-auto">
@@ -31,6 +67,8 @@ const Contact = () => {
       <p className="mb-4">Please complete the form below, and one of our support team members will reach out to you shortly.</p>
 </div>
       <div className="max-w-2xl mx-auto  text-black rounded-lg border border-black">
+      {success && <p className="text-green-500 text-center mb-2">Contact information submitted successfully!</p>}
+      {error && <p className="text-red-500 text-center mb-2">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4 p-6">
           <div className="flex justify-between gap-4">
             <input 
@@ -78,15 +116,12 @@ const Contact = () => {
           <div className="flex justify-center items-center">
           <button 
   type="submit" 
-  className="w-64 p-2 border border-black rounded-lg bg-custom-yellow text-center font-bold transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hover:bg-pink-180 hover:shadow-lg"
->
+  className="w-64 p-2 border border-black rounded-lg bg-custom-yellow text-center font-bold transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hover:bg-pink-180 hover:shadow-lg">
   Submit
 </button>
-
           </div>
         </form>
       </div>
-
       <p className="text-center mt-4">
         We look forward to assisting you and making your TaskFlow experience exceptional.
       </p>
