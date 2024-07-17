@@ -15,8 +15,12 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setIsLoggedIn(false);
     window.location.href = "/login";
   };
+
+  const icon =
+    " h-7 rounded-full cursor-pointer border-1 border-black p-[2px] ";
 
   return (
     <div className="flex w-screen justify-center items-center p-[34px]">
@@ -59,18 +63,29 @@ const Navbar = () => {
             <img
               src="dark-mode.png"
               alt="dark mode icon"
-              className="h-6 border-1 border-black rounded-md p-[2px]"
+              className={`${icon}`}
             />
           </button>
           {isLoggedIn ? (
             <div className="flex items-center gap-3">
+              <button className="">
+                <img
+                  src="bell-ring.png"
+                  alt="notifications"
+                  className={`${icon}`}
+                />
+              </button>
               <img
                 src="user-avatar.png"
                 alt="user avatar"
-                className="h-7 w-7 rounded-full cursor-pointer border-1 border-black p-[2px]"
+                className={`${icon}`}
               />
               <button className="" onClick={handleLogout}>
-                <img src="logout.png" alt="logout" className="h-6 w-6" />
+                <img
+                  src="logout.png"
+                  alt="logout"
+                  className="h-6 w-6 cursor-pointer"
+                />
               </button>
             </div>
           ) : (

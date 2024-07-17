@@ -19,10 +19,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://api-lazbjamuma-ez.a.run.app/api/User/login",
-        { email: username, password }
-      );
+      const response = await axios.post("url", { email, password });
       console.log("response", response.data);
 
       if (response.status === 200) {
