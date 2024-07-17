@@ -21,11 +21,10 @@ function SignUp() {
       });
       if (response.status == 200) {
         navigate("/login");
+        console.log("Sign up successful:", response.data);
       } else {
         console.error("error ");
       }
-      // On successful sign-up, show this message!
-      console.log("Sign up successful:", response.data);
     } catch (error) {
       console.error("Sign up failed:", error);
       // Displaying an error message!!

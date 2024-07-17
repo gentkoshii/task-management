@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Default to false
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -19,8 +19,13 @@ const Navbar = () => {
     window.location.href = "/login";
   };
 
-  const icon =
-    " h-7 rounded-full cursor-pointer border-1 border-black p-[2px] ";
+  const [isClicked, setIsClicked] = useState(false);
+
+  const icon = "h-7 rounded-full cursor-pointer border-1 border-black p-[2px]";
+
+  const handleClickAvatar = () => {
+    setIsClicked(!isClicked); // Toggle isClicked state
+  };
 
   return (
     <div className="flex w-screen justify-center items-center p-[34px]">
@@ -75,11 +80,14 @@ const Navbar = () => {
                   className={`${icon}`}
                 />
               </button>
-              <img
-                src="user-avatar.png"
-                alt="user avatar"
-                className={`${icon}`}
-              />
+              <button className="">
+                <img
+                  src="user-avatar.png"
+                  alt="user avatar"
+                  className={`${icon}`}
+                  onClick={handleClickAvatar} // Corrected onClick handler
+                />
+              </button>
               <button className="" onClick={handleLogout}>
                 <img
                   src="logout.png"
@@ -96,6 +104,13 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
+        {/* Conditional rendering for avatar click dont forget to fix the avatar clicked content and fetch the user name and */}
+        {isClicked && (
+          <div className=" ">
+            <p>{}</p>
+          </div>
+        )}
       </div>
     </div>
   );
