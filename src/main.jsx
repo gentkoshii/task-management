@@ -41,14 +41,6 @@ const router = createBrowserRouter([
         element: <Contact />,
       },
       {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <SignUp />,
-      },
-      {
         path: "/admin",
         element: <Admin />,
       },
@@ -61,6 +53,14 @@ const router = createBrowserRouter([
         element: <Boards />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
   },
 ]);
 

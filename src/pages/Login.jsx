@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import Navbar from "../assets/Navbar";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -39,6 +41,9 @@ function Login() {
 
   return (
     <div className="h-lvh flex flex-col justify-between">
+      <div>
+        <Navbar />
+      </div>
       <div className={`${display} h-full`}>
         <div className={`${display} w-[400px] h-[500px] rounded-4`}>
           <form

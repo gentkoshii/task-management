@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import Navbar from "../assets/Navbar";
+
 function SignUp() {
   const navigate = useNavigate();
 
@@ -37,6 +39,9 @@ function SignUp() {
 
   return (
     <div className="h-lvh flex flex-col justify-between">
+      <div>
+        <Navbar />
+      </div>
       <div className={`${display} w-screen h-full `}>
         <div className={`${display} w-[400px] h-[500px] rounded-4`}>
           <form
