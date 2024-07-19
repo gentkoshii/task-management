@@ -1,10 +1,7 @@
-import React from 'react'
-import './Features.scss';
+import React from "react";
 
 const Features = () => {
-  return (
-    <div className='features'>Features</div>
-  )
-}
+  return <div className="features">Features</div>;
+};
 
-export default Features
+export default Features;

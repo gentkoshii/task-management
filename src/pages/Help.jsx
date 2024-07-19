@@ -1,6 +1,4 @@
 import React from "react";
-import Navbar from "../assets/Navbar.jsx";
-import Footer from "../assets/Footer.jsx";
 
 const gradientStyle = {
   background:
@@ -11,7 +9,6 @@ const gradientStyle = {
 const Help = () => {
   return (
     <div className="flex flex-col items-center overflow-hidden">
-      <Navbar />
       <div className="w-full flex justify-center" style={gradientStyle}>
         <div className="w-[70%] flex flex-col justify-center text-lefft p-24 gap-24">
           <div className="flex flex-col text-xl gap-3  ">
@@ -55,8 +52,6 @@ const Help = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
