@@ -12,7 +12,7 @@ import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Admin from "./pages/Admin.jsx";
 import User from "./pages/User.jsx";
-import Boards from "./pages/Boards.jsx";
+import Board from "./pages/Board.jsx";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -49,8 +49,8 @@ const router = createBrowserRouter([
         element: <User />,
       },
       {
-        path: "/boards",
-        element: <Boards />,
+        path: "/board",
+        element: <Board />,
       },
     ],
   },
