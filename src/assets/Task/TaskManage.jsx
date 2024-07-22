@@ -8,19 +8,29 @@ const TaskManage = () => {
       title: "Task 1",
       state: "To Do",
       description: "Description of Task 1",
+      assignedTo: null, // Initially not assigned
     },
     {
       id: 2,
       title: "Task 2",
       state: "Doing",
       description: "Description of Task 2",
+      assignedTo: null,
     },
     {
       id: 3,
       title: "Task 3",
       state: "Done",
       description: "Description of Task 3",
+      assignedTo: null,
     },
+  ]);
+
+  const [projectMembers] = useState([
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+    { id: 3, name: "Michael Johnson" },
+    { id: 4, name: "Emily Brown" },
   ]);
 
   const handleDeleteTask = (taskId) => {
@@ -28,8 +38,11 @@ const TaskManage = () => {
     setTasks(updatedTasks);
   };
 
-  const handleAssignPerson = (taskId) => {
-    console.log(`Assign person to task with ID: ${taskId}`);
+  const handleAssign = (taskId, memberId) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, assignedTo: memberId } : task
+    );
+    setTasks(updatedTasks);
   };
 
   const handleEditTitle = (taskId, newTitle) => {
@@ -52,6 +65,7 @@ const TaskManage = () => {
       title: `New Task ${tasks.length + 1}`,
       state: state,
       description: `Description of New Task ${tasks.length + 1}`,
+      assignedTo: null,
     };
     setTasks([...tasks, newTask]);
   };
@@ -75,8 +89,10 @@ const TaskManage = () => {
               id={task.id}
               title={task.title}
               description={task.description}
+              assignedTo={task.assignedTo}
+              projectMembers={projectMembers}
               onDelete={() => handleDeleteTask(task.id)}
-              onAssign={() => handleAssignPerson(task.id)}
+              onAssign={(memberId) => handleAssign(task.id, memberId)}
               onEditTitle={(newTitle) => handleEditTitle(task.id, newTitle)}
               onEditDescription={(newDescription) =>
                 handleEditDescription(task.id, newDescription)
