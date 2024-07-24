@@ -11,18 +11,26 @@
   ],
   "tasks": [
     {
-      "id": "1",
-      "title": "Task 1",
-      "description": "Description for task 1",
-      "status": "to do",
-      "projectId": 1
-    },
-    {
-      "id": "3",
       "title": "Task 3",
       "description": "Description for task 3",
       "status": "done",
-      "projectId": 2
+      "priority": "important",
+      "dueDate": "2024-07-24",
+      "id": "3"
+    },
+    {
+      "id": "5473",
+      "title": "Testing tags",
+      "description": "This is just a test for tags function which will separate the tags after commas...",
+      "status": "done",
+      "priority": "normal",
+      "tags": [
+        "UI",
+        "Feature",
+        "Bug"
+      ],
+      "dueDate": "2024-07-25",
+      "timeTracking": "43"
     }
   ]
 }

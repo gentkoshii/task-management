@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Navbar from "../assets/Navbar";
 import { Link } from "react-router-dom";
+import Dashboard from "./User/Dashboard";
+import Projects from "./User/Projects";
+import Tasks from "./User/Tasks";
 
 const User = () => {
   const [activeLink, setActiveLink] = useState("dashboard");
@@ -57,6 +60,9 @@ const User = () => {
         </div>
         <div className="w-full bg-transparent rounded-md border-1">
           {/* map the projects */}
+          {activeLink === "dashboard" ? <Dashboard /> : null}
+          {activeLink === "projects" ? <Projects /> : null}
+          {activeLink === "tasks" ? <Tasks /> : null}
         </div>
       </div>
     </div>

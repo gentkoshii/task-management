@@ -12,7 +12,6 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Sending a Post request!
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -29,7 +28,6 @@ function SignUp() {
       }
     } catch (error) {
       console.error("Sign up failed:", error);
-      // Displaying an error message!!
     }
   };
 

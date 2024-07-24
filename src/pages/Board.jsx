@@ -73,8 +73,21 @@ const Board = () => {
         >
           <h3 className="text-xl font-semibold">{task.title}</h3>
           <p className="text-gray-600">{task.description}</p>
+          <div className="flex flex-wrap mt-2">
+            {task.tags &&
+              task.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
+                >
+                  {tag}
+                </span>
+              ))}
+          </div>
           <p className="text-sm">Status: {task.status}</p>
           <p className="text-sm">Priority: {task.priority}</p>
+          <p className="text-sm">Due Date: {task.dueDate}</p>
+
           <div className="flex space-x-2">
             <button
               onClick={() => openEditTask(task)}
