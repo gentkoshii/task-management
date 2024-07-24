@@ -28,7 +28,7 @@ const Homepage = () => {
         <div className="w[50%] flex flex-col gap-6">
           <h1>TaskFlow Brings all your tasks, teammates, and tools together</h1>
           <h3>Keep everything in the same place—even if your team isn’t.</h3>
-          <Link>
+          <Link to={"/login"}>
             <button className={`${button} bg-[#FFAF64]`}>Get Started</button>
           </Link>
         </div>

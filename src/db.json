@@ -1,0 +1,28 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "name": "Project 1"
+    },
+    {
+      "id": "2",
+      "name": "Project 2"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Task 1",
+      "description": "Description for task 1",
+      "status": "to do",
+      "projectId": 1
+    },
+    {
+      "id": "3",
+      "title": "Task 3",
+      "description": "Description for task 3",
+      "status": "done",
+      "projectId": 2
+    }
+  ]
+}

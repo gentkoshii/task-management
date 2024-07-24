@@ -8,6 +8,7 @@ import Navbar from "../assets/Navbar";
 function SignUp() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,6 +17,7 @@ function SignUp() {
     e.preventDefault();
     try {
       const response = await axios.post("url", {
+        name,
         email,
         password,
       });
@@ -56,6 +58,13 @@ function SignUp() {
             <input
               className={`${input}`}
               type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              className={`${input}`}
+              type="text"
               placeholder="example@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -71,7 +80,7 @@ function SignUp() {
               type="submit"
               id="signupButton"
               value="Sign Up"
-              className="h-10 w-24 rounded-5 bg-[#FFD56F] border-1 border-solid border-black text-xl"
+              className="h-10 w-24 rounded-4 bg-[#FFD56F] border-1 border-solid border-black text-xl"
             />
             <h4>Already Have An Account?</h4>
             <Link to="/login" className="text-gray-800 no-underline">

@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Navbar from "../assets/Navbar";
 
 function Login() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login"; // Redirect to login
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,10 +15,10 @@ function Login() {
       console.log("response", response.data);
 
       if (response.status === 200) {
-        const token = response.data.token; // Extracting token
+        const token = response.data.token;
         localStorage.setItem("token", token);
         console.log("token", token);
-        window.location.href = "/"; //Fix it to redirect to User Dashboard
+        window.location.href = "/user"; //Fix it to redirect to User Dashboard
       }
     } catch (error) {
       console.log(error);
@@ -73,7 +65,7 @@ function Login() {
               type="submit"
               id="loginButton"
               value="Log In"
-              className=" h-10 w-24 rounded-5 bg-[#FFD56F] border-1 border-solid border-black text-xl"
+              className=" h-10 w-24 rounded-4 bg-[#FFD56F] border-1 border-solid border-black text-xl"
             />
             <h4>Don't Have An Account ?</h4>
             <Link to="/signup" className="text-gray-800 no-underline ">

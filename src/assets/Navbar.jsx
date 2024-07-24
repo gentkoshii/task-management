@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Default to false
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [name, setName] = useState("");
+  const [initial, setInitial] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -11,7 +13,23 @@ const Navbar = () => {
     } else {
       setIsLoggedIn(false);
     }
+    fetchName();
   }, []);
+
+  const fetchName = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("url");
+      if (response.ok) {
+        const data = await response.json();
+        const userName = data.name;
+        setName(userName);
+        setInitial(name.trim().charAt(0).toUpperCase());
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -19,13 +37,7 @@ const Navbar = () => {
     window.location.href = "/login";
   };
 
-  const [isClicked, setIsClicked] = useState(false);
-
   const icon = "h-7 rounded-full cursor-pointer border-1 border-black p-[2px]";
-
-  const handleClickAvatar = () => {
-    setIsClicked(!isClicked); // Toggle isClicked state
-  };
 
   return (
     <div className="flex w-screen justify-center items-center p-[34px]">
@@ -81,12 +93,9 @@ const Navbar = () => {
                 />
               </button>
               <button className="">
-                <img
-                  src="user-avatar.png"
-                  alt="user avatar"
-                  className={`${icon}`}
-                  onClick={handleClickAvatar} // Corrected onClick handler
-                />
+                <div className="h-7 w-7 flex justify-center bg-red-400 rounded-full border-1 border-black p-[2px]">
+                  <p>{initial}</p>
+                </div>
               </button>
               <button className="" onClick={handleLogout}>
                 <img
@@ -104,13 +113,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
-        {/* Conditional rendering for avatar click dont forget to fix the avatar clicked content and fetch the user name and */}
-        {isClicked && (
-          <div className=" ">
-            <p>{}</p>
-          </div>
-        )}
       </div>
     </div>
   );
