@@ -74,6 +74,7 @@ const Board = () => {
           <h3 className="text-xl font-semibold">{task.title}</h3>
           <p className="text-gray-600">{task.description}</p>
           <p className="text-sm">Status: {task.status}</p>
+          <p className="text-sm">Priority: {task.priority}</p>
           <div className="flex space-x-2">
             <button
               onClick={() => openEditTask(task)}

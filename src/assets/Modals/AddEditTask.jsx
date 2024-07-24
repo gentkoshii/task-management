@@ -5,17 +5,19 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("to do");
+  const [priority, setPriority] = useState("normal");
 
   useEffect(() => {
     if (type === "edit" && currentTask) {
       setTitle(currentTask.title);
       setDescription(currentTask.description);
       setStatus(currentTask.status);
+      setPriority(currentTask.priority || "normal");
     }
   }, [type, currentTask]);
 
   const handleSave = () => {
-    const task = { title, description, status };
+    const task = { title, description, status, priority };
     onSaveTask(task);
     setOpenAddEditTask(false);
   };
@@ -77,6 +79,21 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
             <option value="to do">To Do</option>
             <option value="doing">Doing</option>
             <option value="done">Done</option>
+          </select>
+        </div>
+        <div className="mt-8 flex flex-col space-y-1">
+          <label htmlFor="taskPriority" className="text-sm">
+            Priority
+          </label>
+          <select
+            id="taskPriority"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="bg-transparent px-4 py-2 outline-none focus:border-0 rounded-md text-sm 
+          border border-gray-600 focus:outline-[#FFDF92] ring-1"
+          >
+            <option value="normal">Normal</option>
+            <option value="important">Important</option>
           </select>
         </div>
         <div className="mt-8">
