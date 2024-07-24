@@ -17,7 +17,6 @@ const Navbar = () => {
   }, []);
 
   const fetchName = async (e) => {
-    e.preventDefault();
     try {
       const response = await fetch("url");
       if (response.ok) {
