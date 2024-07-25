@@ -8,14 +8,28 @@ import Features from './pages/Features.jsx';
 import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
-import Admin from './pages/Admin.jsx';
-import User from './pages/User.jsx';
-import Homepage from './pages/Homepage.jsx'
+import AdminLayout from './assets/Admin/AdminLayout.jsx';
+import Homepage from './pages/Homepage.jsx';
 import Boards from './pages/Boards.jsx';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Users from "./assets/Admin/Users.jsx";
+import Dashboard from './assets/Admin/SidebarItems/Dashboard.jsx';
+import Profile from './assets/Admin/SidebarItems/Profile.jsx';
+import TaskOverview from './assets/Admin/SidebarItems/TaskOverview.jsx';
 
 const router = createBrowserRouter([
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "users", element: <Users /> },
+      { path: "profile", element: <Profile /> },
+      { path: "tasksoverview", element: <TaskOverview /> },
+    ]
+  },
   {
     path: "/",
     element: <App />,
@@ -27,8 +41,6 @@ const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <SignUp /> },
-      { path: "admin", element: <Admin /> },
-      { path: "user", element: <User /> },
       { path: "boards", element: <Boards /> },
     ]
   },

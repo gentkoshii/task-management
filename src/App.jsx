@@ -1,16 +1,17 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './assets/Navbar.jsx';
 import Footer from './assets/Footer.jsx';
 
+  const App = () => {
+    const location = useLocation();
+    const showNavAndFooter = !location.pathname.startsWith('/admin');  
 
-
-const App = () => {
   return (
     <div className='overflow-hidden'>
-      <Navbar />
+      {showNavAndFooter && <Navbar />}
       <Outlet />  
-      <Footer />
+      {showNavAndFooter && <Footer />}
     </div>
   );
 }
