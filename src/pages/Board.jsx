@@ -107,7 +107,7 @@ const Board = () => {
   };
 
   return (
-    <div className="min-h-[100vh] flex flex-col justify-between">
+    <div className="min-h-[100vh] flex flex-col justify-between overflow-hidden">
       <Navbar />
       <div className="w-[60%] mx-[20%] py-[30px]">
         <button

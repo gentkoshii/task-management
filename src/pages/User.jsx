@@ -3,10 +3,14 @@ import Navbar from "../assets/Navbar";
 import { Link } from "react-router-dom";
 import Dashboard from "./User/Dashboard";
 import Projects from "./User/Projects";
-import Tasks from "./User/Tasks";
 
 const User = () => {
   const [activeLink, setActiveLink] = useState("dashboard");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
   return (
     <div className="flex flex-col gap-3 min-h[100vh] overflow-hidden ">
@@ -39,30 +43,21 @@ const User = () => {
             >
               Projects
             </Link>
-            <Link
-              className={`text-md font-semibold text-black no-underline hover:translate-x-[2px] pl-6 ${
-                activeLink === "tasks" ? "bg-[#fff2d3] w-48 rounded-md" : ""
-              }`}
-              onClick={() => setActiveLink("tasks")}
-            >
-              Tasks
-            </Link>
           </div>
           <div>
-            <Link to={"/login"}>
+            <button onClick={handleLogout}>
               <img
                 src="logout.png"
                 alt="logout"
-                className="h-6 hover:translate-x-[2px]"
+                className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
               />
-            </Link>
+            </button>
           </div>
         </div>
         <div className="w-full bg-transparent rounded-md border-1">
           {/* map the projects */}
           {activeLink === "dashboard" ? <Dashboard /> : null}
           {activeLink === "projects" ? <Projects /> : null}
-          {activeLink === "tasks" ? <Tasks /> : null}
         </div>
       </div>
     </div>
