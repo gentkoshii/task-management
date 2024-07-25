@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState("");
   const [status, setStatus] = useState("to do");
   const [priority, setPriority] = useState("normal");
   const [dueDate, setDueDate] = useState("");
@@ -14,7 +14,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
     if (type === "edit" && currentTask) {
       setTitle(currentTask.title);
       setDescription(currentTask.description);
-      setTags(currentTask.tags);
+      setTags(currentTask.tags ? currentTask.tags.join(", ") : "");
       setStatus(currentTask.status);
       setPriority(currentTask.priority || "normal");
       setDueDate(currentTask.dueDate);
@@ -46,7 +46,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
       }}
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+      <div className="bg-white px-8 py-6 rounded-lg shadow-lg w-full max-w-lg">
         <div>
           <h3 className="text-xl font-semibold">
             {type === "edit" ? "Edit" : "Add New"} Task
@@ -55,7 +55,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
         <button className="w-auto bg-[#FFDF92] text-black mt-3 px-4 py-2 rounded hover:-translate-y-[1px]">
           Add Reminder
         </button>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskName" className="text-sm">
             Task Name
           </label>
@@ -69,7 +69,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
           border border-gray-500 focus:outline-[#FFDF92] ring-1"
           />
         </div>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskDescription" className="text-sm">
             Task Description
           </label>
@@ -82,20 +82,22 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
           border border-gray-600 focus:outline-[#FFDF92] ring-1"
           />
         </div>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskTags" className="text-sm">
             Tags (Separate with commas)
           </label>
           <textarea
             id="taskTags"
-            placeholder="e.g UI, Feature, Bug, Testing..."
+            placeholder="e.g UI, Feature, Bug, Testing"
             value={tags}
-            onChange={(e) => setTags(e.target.value)}
+            onChange={(e) =>
+              setTags(e.target.value.split(",").map((tag) => tag.trim()))
+            }
             className="bg-transparent px-4 py-2 outline-none focus:border-0 min-h-200 rounded-md text-sm 
           border border-gray-600 focus:outline-[#FFDF92] ring-1"
           />
         </div>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskStatus" className="text-sm">
             Status
           </label>
@@ -111,7 +113,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
             <option value="done">Done</option>
           </select>
         </div>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskPriority" className="text-sm">
             Priority
           </label>
@@ -126,7 +128,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
             <option value="important">Important</option>
           </select>
         </div>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskDueDate" className="text-sm">
             Due Date
           </label>
@@ -139,13 +141,14 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
           border border-gray-600 focus:outline-[#FFDF92] ring-1"
           />
         </div>
-        <div className="mt-8 flex flex-col space-y-1">
+        <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskTimeTracking" className="text-sm">
             Time Tracking (Minutes)
           </label>
           <input
             type="number"
             id="taskTimeTracking"
+            placeholder="e.g 40"
             value={timeTracking}
             onChange={(e) => setTimeTracking(e.target.value)}
             className="bg-transparent px-4 py-2 outline-none focus:border-0 rounded-md text-sm 
@@ -153,7 +156,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
           />
         </div>
 
-        <div className="mt-8">
+        <div className="mt-4">
           <button
             onClick={handleSave}
             className="w-full bg-[#FFDF92] text-black px-4 py-2 rounded hover:-translate-y-[1px]"
