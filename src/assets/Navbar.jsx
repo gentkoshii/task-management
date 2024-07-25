@@ -20,7 +20,7 @@ const Navbar = () => {
 
   const fetchName = async (e) => {
     try {
-      const response = await fetch("url");
+      const response = await fetch("http://localhost:3000/users");
       if (response.ok) {
         const data = await response.json();
         const userName = data.email;
