@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [name, setName] = useState("");
   const [initial, setInitial] = useState("");
 
   useEffect(() => {
@@ -21,9 +23,8 @@ const Navbar = () => {
       const response = await fetch("url");
       if (response.ok) {
         const data = await response.json();
-        const userName = data.name;
-        setName(userName);
-        setInitial(name.trim().charAt(0).toUpperCase());
+        const userName = data.email;
+        setInitial(userName.trim().charAt(0).toUpperCase());
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -33,7 +34,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   const icon = "h-7 rounded-full cursor-pointer border-1 border-black p-[2px]";

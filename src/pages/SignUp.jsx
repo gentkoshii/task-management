@@ -8,7 +8,6 @@ import Navbar from "../assets/Navbar";
 function SignUp() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,7 +15,6 @@ function SignUp() {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/users", {
-        name,
         email,
         password,
       });
@@ -53,13 +51,6 @@ function SignUp() {
               <h2>TaskFlow</h2>
             </div>
             <h4>Sign Up To Continue</h4>
-            <input
-              className={`${input}`}
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
             <input
               className={`${input}`}
               type="text"

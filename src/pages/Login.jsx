@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Navbar from "../assets/Navbar";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("url", { email, password });
+      const response = await axios.post("url", {
+        email,
+        password,
+      });
       console.log("response", response.data);
 
       if (response.status === 200) {
         const token = response.data.token;
         localStorage.setItem("token", token);
         console.log("token", token);
-        window.location.href = "/user"; //Fix it to redirect to User Dashboard
+        navigate("/user");
       }
     } catch (error) {
       console.log(error);
