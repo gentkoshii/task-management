@@ -1,4 +1,12 @@
 {
+  "users": [
+    {
+      "id": "da7a",
+      "name": "Gent",
+      "email": "gentkoshi@gmail.com",
+      "password": "12345678"
+    }
+  ],
   "projects": [
     {
       "id": "1",
