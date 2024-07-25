@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import CustomButton from '../components/Button';
 
 const Features = () => {
   const gradientStyle = {
@@ -7,7 +7,6 @@ const Features = () => {
     backgroundSize: 'cover'
   };
 
-  
   return (
     <section style={gradientStyle} className="py-12">
       <div className="container mx-auto px-4">
@@ -21,9 +20,7 @@ const Features = () => {
             <h2 className="text-3xl mb-4">Easy Task Management</h2>
             <p>Organize and manage your tasks with ease using our intuitive interface.
             Our platform offers a user-friendly interface designed to simplify your task management experience. With drag-and-drop functionality, customizable views, and smart filters, you can effortlessly organize your tasks according to priority, deadlines, and project categories. The intuitive design ensures that even the most complex task lists can be managed efficiently, allowing you to focus on what truly matters.</p>
-            <Link to="/login" className="inline-block mt-4 px-6 py-2 bg-blue-400 text-white font-bold text-center rounded hover:bg-blue-500 transition-colors duration-300 no-underline">
-            Try It Now!
-            </Link>
+            <CustomButton to="/login" color="blue" bgColor="blue" btnText="Try It Now!" />
           </div>
         </div>
 
@@ -35,11 +32,8 @@ const Features = () => {
             <h2 className="text-3xl mb-4">Task Creation</h2>
             <p>Create tasks quickly and easily, and keep track of your progress.
             Creating tasks has never been easier. With just a few clicks, you can add new tasks, set deadlines, assign them to team members, and add detailed descriptions or subtasks. Our platform provides a comprehensive overview of your progress, displaying completed, pending, and overdue tasks in a clear, visual manner. Automated reminders and notifications ensure you stay on top of your responsibilities, making task creation and management a breeze.</p>
-           <Link to="/login" className="inline-block mt-4 px-6 py-2 bg-blue-400 text-white font-bold text-center rounded hover:bg-blue-500 transition-colors duration-300 no-underline">
-            Try It Now!
-            </Link>
+            <CustomButton to="/login" color="blue" bgColor="blue" btnText="Try It Now!" />
           </div>
-
         </div>
 
         <div className="flex flex-wrap items-center mb-20">
@@ -50,9 +44,7 @@ const Features = () => {
             <h2 className="text-3xl mb-4">Collaboration</h2>
             <p>Share your tasks with others and work together seamlessly.
             Effective collaboration is at the heart of our platform. You can easily share tasks with team members, assign roles, and monitor progress in real-time. The built-in communication tools, such as comments and instant messaging, facilitate smooth interaction and idea sharing. Whether you're working on a small team project or coordinating with a large group, our platform ensures everyone is on the same page, working towards common goals with maximum efficiency.</p>
-            <Link to="/login" className="inline-block mt-4 px-6 py-2 bg-blue-400 text-white font-bold text-center rounded hover:bg-blue-500 transition-colors duration-300 no-underline">
-            Try It Now!
-            </Link>
+            <CustomButton to="/login" color="blue" bgColor="blue" btnText="Try It Now!" />
           </div>
         </div>
       </div>
