@@ -90,9 +90,7 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
             id="taskTags"
             placeholder="e.g UI, Feature, Bug, Testing"
             value={tags}
-            onChange={(e) =>
-              setTags(e.target.value.split(",").map((tag) => tag.trim()))
-            }
+            onChange={(e) => setTags(e.target.value)}
             className="bg-transparent px-4 py-2 outline-none focus:border-0 min-h-200 rounded-md text-sm 
           border border-gray-600 focus:outline-[#FFDF92] ring-1"
           />
