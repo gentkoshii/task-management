@@ -1,11 +1,12 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import AddEditTask from "../assets/Modals/AddEditTask";
 import Navbar from "../assets/Navbar";
 import Footer from "../assets/Footer";
 import axios from "axios";
 
 const Board = () => {
+  const { projectId } = useParams(); // Get the project ID from the URL
   const [openAddEditTask, setOpenAddEditTask] = useState(false);
   const [taskType, setTaskType] = useState("add");
   const [tasks, setTasks] = useState([]);
@@ -14,11 +15,18 @@ const Board = () => {
   const URL = "http://localhost:3000";
 
   useEffect(() => {
+    fetchTasks();
+  }, [projectId]); // Refetch tasks whenever projectId changes
+
+  const fetchTasks = () => {
     axios
-      .get(`${URL}/tasks`)
-      .then((response) => setTasks(response.data))
+      .get(`${URL}/projects/${projectId}`) // Fetch the project
+      .then((response) => {
+        const project = response.data;
+        setTasks(project.tasks || []); // Set tasks from the project's tasks array
+      })
       .catch((error) => console.error("Error fetching tasks:", error));
-  }, []);
+  };
 
   const openAddTask = () => {
     setTaskType("add");
@@ -34,20 +42,23 @@ const Board = () => {
 
   const handleSaveTask = (task) => {
     if (taskType === "add") {
+      const newTask = { ...task, id: generateUniqueId() }; // Generate a unique ID for the new task
       axios
-        .post(`${URL}/tasks`, task)
-        .then((response) => {
-          setTasks([...tasks, response.data]);
+        .patch(`${URL}/projects/${projectId}`, {
+          tasks: [...tasks, newTask],
+        }) // Update the project's tasks array
+        .then(() => {
+          setTasks([...tasks, newTask]);
           setOpenAddEditTask(false);
         })
         .catch((error) => console.error("Error creating task:", error));
     } else {
       axios
-        .put(`${URL}/tasks/${currentTask.id}`, task)
-        .then((response) => {
-          setTasks(
-            tasks.map((t) => (t.id === currentTask.id ? response.data : t))
-          );
+        .patch(`${URL}/projects/${projectId}`, {
+          tasks: tasks.map((t) => (t.id === currentTask.id ? task : t)),
+        }) // Update the project's tasks array
+        .then(() => {
+          setTasks(tasks.map((t) => (t.id === currentTask.id ? task : t)));
           setOpenAddEditTask(false);
         })
         .catch((error) => console.error("Error updating task:", error));
@@ -56,7 +67,9 @@ const Board = () => {
 
   const deleteTask = (id) => {
     axios
-      .delete(`${URL}/tasks/${id}`)
+      .patch(`${URL}/projects/${projectId}`, {
+        tasks: tasks.filter((task) => task.id !== id),
+      }) // Update the project's tasks array
       .then(() => {
         setTasks(tasks.filter((task) => task.id !== id));
       })
@@ -106,9 +119,13 @@ const Board = () => {
       ));
   };
 
+  // Helper function to generate unique ID for new tasks
+  const generateUniqueId = () => {
+    return Math.random().toString(36).substr(2, 9);
+  };
+
   return (
     <div className="min-h-[100vh] flex flex-col justify-between overflow-hidden">
-      <Navbar />
       <div className="w-[60%] mx-[20%] py-[30px]">
         <button
           onClick={openAddTask}
@@ -138,7 +155,6 @@ const Board = () => {
           />
         )}
       </div>
-      <Footer />
     </div>
   );
 };

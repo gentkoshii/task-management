@@ -9,23 +9,35 @@
   "projects": [
     {
       "id": "1",
-      "name": "Project 1"
+      "name": "Project 1",
+      "tasks": [
+        {
+          "title": "23",
+          "description": "",
+          "status": "to do",
+          "priority": "normal",
+          "tags": [""],
+          "dueDate": "",
+          "timeTracking": "",
+          "id": "3uxpxrlnp"
+        }
+      ]
     },
     {
       "id": "2",
-      "name": "Project 2"
-    }
-  ],
-  "tasks": [
-    {
-      "title": "Testing tags",
-      "description": "This is just a test for tags function which will separate the tags after commas...",
-      "status": "doing",
-      "priority": "normal",
-      "tags": ["UI", "Feature", "Bug"],
-      "dueDate": "2024-07-25",
-      "timeTracking": "43",
-      "id": "5473"
+      "name": "Project 2",
+      "tasks": [
+        {
+          "title": "Testing tags",
+          "description": "This is just a test for tags function which will separate the tags after commas...",
+          "status": "doing",
+          "priority": "normal",
+          "tags": ["UI", "Feature", "Bug"],
+          "dueDate": "2024-07-25",
+          "timeTracking": "43",
+          "id": "5473"
+        }
+      ]
     }
   ]
 }

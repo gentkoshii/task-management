@@ -47,7 +47,11 @@ const Navbar = () => {
             to="/"
             className="flex items-center gap-2 text-black no-underline"
           >
-            <img src="1.png" alt="logo" className="h-10 rounded-md" />
+            <img
+              src="../../../public/1.png"
+              alt="logo"
+              className="h-10 rounded-md"
+            />
             <h5 className="m-0">TaskFlow</h5>
           </Link>
         </div>
@@ -78,7 +82,7 @@ const Navbar = () => {
           />
           <button>
             <img
-              src="dark-mode.png"
+              src="../../../public/dark-mode.png"
               alt="dark mode icon"
               className={`${icon}`}
             />
@@ -87,7 +91,7 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <button className="">
                 <img
-                  src="bell-ring.png"
+                  src="../../../public/bell-ring.png"
                   alt="notifications"
                   className={`${icon}`}
                 />
@@ -99,7 +103,7 @@ const Navbar = () => {
               </button>
               <button className="" onClick={handleLogout}>
                 <img
-                  src="logout.png"
+                  src="../../../public/logout.png"
                   alt="logout"
                   className="h-6 w-6 cursor-pointer"
                 />

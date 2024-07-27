@@ -47,14 +47,22 @@ function AddEditTask({ type, setOpenAddEditTask, onSaveTask, currentTask }) {
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
       <div className="bg-white px-8 py-6 rounded-lg shadow-lg w-full max-w-lg">
-        <div>
+        <div className="flex justify-between">
           <h3 className="text-xl font-semibold">
             {type === "edit" ? "Edit" : "Add New"} Task
           </h3>
+          <button
+            onClick={() => setOpenAddEditTask(false)}
+            className="top-2 right-2 text-gray-600 font-semibold text-xl"
+          >
+            X
+          </button>
         </div>
+
         <button className="w-auto bg-[#FFDF92] text-black mt-3 px-4 py-2 rounded hover:-translate-y-[1px]">
           Add Reminder
         </button>
+
         <div className="mt-4 flex flex-col space-y-1">
           <label htmlFor="taskName" className="text-sm">
             Task Name

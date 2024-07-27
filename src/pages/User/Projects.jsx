@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddProject from "../../assets/Modals/AddProject";
 
@@ -9,6 +9,7 @@ const Projects = () => {
   const [newProjectName, setNewProjectName] = useState("");
 
   const URL = "http://localhost:3000";
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     fetchProjects();
@@ -36,6 +37,10 @@ const Projects = () => {
       .catch((error) => console.error("Error creating project:", error));
   };
 
+  const handleProjectClick = (projectId) => {
+    navigate(`/projects/${projectId}`);
+  };
+
   return (
     <div className="flex flex-col gap-10 m-10 h-full">
       <div>
@@ -58,14 +63,12 @@ const Projects = () => {
         {projects.map((project) => (
           <div
             key={project.id}
-            className="bg-[#FFDF92] min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64"
+            onClick={() => handleProjectClick(project.id)} // Handle click to navigate
+            className="bg-[#FFDF92] min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer"
           >
-            <Link
-              to={`/projects/${project.id}`}
-              className="text-xl text-black no-underline font-semibold"
-            >
+            <div className="text-xl text-black no-underline font-semibold">
               {project.name}
-            </Link>
+            </div>
           </div>
         ))}
       </div>
