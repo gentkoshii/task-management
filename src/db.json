@@ -10,34 +10,116 @@
     {
       "id": "1",
       "name": "Project 1",
+      "columns": [
+        "to do",
+        "in progress",
+        "done",
+        "in review"
+      ],
+      "createdAt": "2024-07-27T12:00:00Z",
+      "updatedAt": "2024-07-27T12:00:00Z",
       "tasks": [
         {
-          "title": "23",
-          "description": "",
-          "status": "to do",
-          "priority": "normal",
-          "tags": [""],
-          "dueDate": "",
+          "title": "Test",
+          "description": "Test",
+          "tags": [
+            "test",
+            "bug"
+          ],
+          "subtasks": [
+            "Subtask",
+            "test"
+          ],
+          "priority": "Critical",
+          "dueDate": "2024-07-28",
+          "status": "",
+          "reminder": "",
           "timeTracking": "",
-          "id": "3uxpxrlnp"
+          "file": null
+        },
+        {
+          "title": "Project 1",
+          "description": "This is a description...",
+          "tags": [
+            "Test",
+            "Bugs",
+            "Subtasks"
+          ],
+          "subtasks": [
+            "Testin",
+            "Bugs",
+            "Project"
+          ],
+          "priority": "Normal",
+          "dueDate": "2024-07-28",
+          "status": "to do",
+          "reminder": "",
+          "timeTracking": "",
+          "file": null,
+          "id": "igdo7x4tb"
         }
       ]
     },
     {
-      "id": "2",
+      "id": "990f",
       "name": "Project 2",
+      "columns": [
+        "Backlog",
+        "To Do",
+        "Doing",
+        "review",
+        "done"
+      ],
+      "createdAt": "2024-07-27T12:46:39.769Z",
+      "updatedAt": "2024-07-27T12:46:39.769Z",
       "tasks": [
         {
-          "title": "Testing tags",
-          "description": "This is just a test for tags function which will separate the tags after commas...",
-          "status": "doing",
-          "priority": "normal",
-          "tags": ["UI", "Feature", "Bug"],
-          "dueDate": "2024-07-25",
-          "timeTracking": "43",
-          "id": "5473"
+          "title": "Test",
+          "description": "This is a test",
+          "tags": [
+            "Test",
+            "Bug"
+          ],
+          "priority": "Important",
+          "dueDate": "2024-07-27",
+          "status": "Backlog",
+          "reminder": "",
+          "timeTracking": "",
+          "file": null,
+          "comments": [
+            "thsi is a comment"
+          ]
         }
       ]
+    },
+    {
+      "id": "fec7",
+      "name": "Project 3",
+      "columns": [
+        "test",
+        "test1",
+        "test2",
+        "test4",
+        "test5",
+        "test6."
+      ],
+      "createdAt": "2024-07-27T14:09:11.080Z",
+      "updatedAt": "2024-07-27T14:09:11.080Z"
+    },
+    {
+      "id": "0a9e",
+      "name": "Project 4",
+      "columns": [
+        ""
+      ],
+      "createdAt": "2024-07-27T19:10:35.399Z",
+      "updatedAt": "2024-07-27T19:10:35.399Z"
+    },
+    {
+      "id": "5360",
+      "name": "test",
+      "createdAt": "2024-07-27T22:25:32.379Z",
+      "updatedAt": "2024-07-27T22:25:32.379Z"
     }
   ]
 }

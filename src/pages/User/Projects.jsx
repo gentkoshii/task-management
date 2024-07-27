@@ -9,7 +9,7 @@ const Projects = () => {
   const [newProjectName, setNewProjectName] = useState("");
 
   const URL = "http://localhost:3000";
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProjects();
@@ -25,6 +25,8 @@ const Projects = () => {
   const handleSaveProject = () => {
     const newProject = {
       name: newProjectName,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     axios
@@ -37,7 +39,16 @@ const Projects = () => {
       .catch((error) => console.error("Error creating project:", error));
   };
 
-  const handleProjectClick = (projectId) => {
+  const handleDeleteProject = (projectId) => {
+    axios
+      .delete(`${URL}/projects/${projectId}`)
+      .then(() => {
+        setProjects(projects.filter((project) => project.id !== projectId));
+      })
+      .catch((error) => console.error("Error deleting project:", error));
+  };
+
+  const handleClick = (projectId) => {
     navigate(`/projects/${projectId}`);
   };
 
@@ -63,12 +74,29 @@ const Projects = () => {
         {projects.map((project) => (
           <div
             key={project.id}
-            onClick={() => handleProjectClick(project.id)} // Handle click to navigate
+            onClick={() => handleClick(project.id)} // Ensure this is correctly navigating
             className="bg-[#FFDF92] min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer"
           >
-            <div className="text-xl text-black no-underline font-semibold">
+            <div className="text-xl text-black font-semibold">
               {project.name}
             </div>
+            <p className="text-sm text-gray-600 mt-2">
+              Created: {new Date(project.createdAt).toLocaleDateString()}
+            </p>
+            {project.updatedAt && (
+              <p className="text-sm text-gray-600">
+                Last Updated: {new Date(project.updatedAt).toLocaleDateString()}
+              </p>
+            )}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteProject(project.id);
+              }}
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Delete Project
+            </button>
           </div>
         ))}
       </div>
