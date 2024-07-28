@@ -32,7 +32,7 @@
           ],
           "priority": "Critical",
           "dueDate": "2024-07-28",
-          "status": "",
+          "status": "done",
           "reminder": "",
           "timeTracking": "",
           "file": null

@@ -57,7 +57,7 @@ const Projects = () => {
       <div>
         <button
           onClick={() => setIsAddProjectOpen(true)}
-          className="bg-[#FFDF92] text-lg text-black my-3 px-4 py-2 rounded hover:translate-x-1"
+          className="bg-[#ffe3a0] text-lg text-black my-3 px-4 py-2 rounded hover:-translate-y-1"
         >
           Create a new Project
         </button>
@@ -75,7 +75,7 @@ const Projects = () => {
           <div
             key={project.id}
             onClick={() => handleClick(project.id)} // Ensure this is correctly navigating
-            className="bg-[#FFDF92] min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer"
+            className=" bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)]  min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer hover:-translate-y-1"
           >
             <div className="text-xl text-black font-semibold">
               {project.name}
@@ -93,7 +93,7 @@ const Projects = () => {
                 e.stopPropagation();
                 handleDeleteProject(project.id);
               }}
-              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
             >
               Delete Project
             </button>
