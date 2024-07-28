@@ -16,7 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Users from "./assets/Admin/Users.jsx";
 import Dashboard from './assets/Admin/SidebarItems/Dashboard.jsx';
 import Profile from './assets/Admin/SidebarItems/Profile.jsx';
-import TaskOverview from './assets/Admin/SidebarItems/TaskOverview.jsx';
+import ContactMessages from './assets/Admin/SidebarItems/ContactMessages.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "users", element: <Users /> },
       { path: "profile", element: <Profile /> },
-      { path: "tasksoverview", element: <TaskOverview /> },
+      { path: "messages", element: <ContactMessages /> },
     ]
   },
   {

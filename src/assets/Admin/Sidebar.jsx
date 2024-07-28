@@ -2,10 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUserCog,
-  faClipboardList,
   faUser,
   faTachometerAlt,
   faSignOutAlt,
+  faMessage,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
 
@@ -13,7 +13,7 @@ const Sidebar = ({ isOpen, toggleDrawer, toggleLogout }) => {
     const menuItems = [
         { icon: faTachometerAlt, text: 'Dashboard' },
         { icon: faUserCog, text: 'Users' },
-        { icon: faClipboardList, text: 'Tasks Overview' },
+        { icon: faMessage, text: 'Messages' },
         { icon: faUser, text: 'Profile' },
         { icon: faSignOutAlt, text: 'Log Out' }
     ];
