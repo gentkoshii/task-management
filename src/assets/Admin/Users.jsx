@@ -1,22 +1,32 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useTable, usePagination, useSortBy, useFilters } from 'react-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faEye } from '@fortawesome/free-solid-svg-icons';
-import CustomButton from '../../components/Button'
+import CustomButton from '../../components/Button';
 
 const Users = () => {
-    const data = useMemo(() => [
-        { id: 1, name: 'Howell Hand', company: 'Kiehn-Green', city: 'Emelyside', progress: 70, created: 'Mar 3, 2023' },
-        { id: 2, name: 'Hope Howe', company: 'Nolan Inc', city: 'Paristown', progress: 80, created: 'Dec 1, 2023' },
-        { id: 3, name: 'Nelson Jerde', company: 'Nitzsche LLC', city: 'Jailynbury', progress: 55, created: 'May 18, 2023' },
-        { id: 4, name: 'Kim Weimann', company: 'Brown-Lueilwitz', city: 'New Emie', progress: 60, created: 'May 4, 2023' },
-        { id: 5, name: 'Justice O\'Reilly', company: 'Lakin-Muller', city: 'New Kacie', progress: 90, created: 'Mar 27, 2023' },
-    ], []);
+    const [data, setData] = useState([]);
+    const [filterInput, setFilterInput] = useState('');
+
+    useEffect(() => {
+        // Fetch data from the API
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://api.example.com/users');
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const columns = useMemo(() => [
         { Header: 'Name', accessor: 'name' },
-        { Header: 'Company', accessor: 'company' },
-        { Header: 'City', accessor: 'city' },
+        { Header: 'Last Name', accessor: 'lastName' },
+        { Header: 'Email', accessor: 'email' },
         { Header: 'Progress', accessor: 'progress', Cell: ({ value }) => <progress max="100" value={value} className="w-full h-2 bg-green-200 rounded">{value}%</progress> },
         { Header: 'Created', accessor: 'created' },
         { Header: 'Actions', Cell: ({ row }) => (
@@ -42,8 +52,6 @@ const Users = () => {
         setFilter,
     } = useTable({ columns, data, initialState: { pageIndex: 0 } }, useFilters, useSortBy, usePagination);
 
-    const [filterInput, setFilterInput] = useState('');
-
     const handleFilterChange = (e) => {
         const value = e.target.value || undefined;
         setFilter('name', value);
@@ -51,11 +59,11 @@ const Users = () => {
     };
 
     const handleViewUser = (user) => {
-        alert(`Viewing user: ${user.name}`);
+        alert(`Viewing user: ${user.name} ${user.lastName}`);
     };
 
     const handleEditUser = (user) => {
-        alert(`Editing user: ${user.name}`);
+        alert(`Editing user: ${user.name} ${user.lastName}`);
     };
 
     const handleDeleteUser = (userId) => {
