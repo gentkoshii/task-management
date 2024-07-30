@@ -71,7 +71,7 @@ const AddEditTask = ({
 
   const addSubtask = () => {
     if (newSubtask) {
-      setSubtasks([...subtasks, newSubtask]);
+      setSubtasks([...subtasks, { text: newSubtask, completed: false }]);
       setNewSubtask("");
     }
   };
@@ -148,7 +148,7 @@ const AddEditTask = ({
                 id="newSubtask"
                 type="text"
                 placeholder="New subtask"
-                value={newSubtask}
+                value={newSubtask.text}
                 onChange={(e) => setNewSubtask(e.target.value)}
                 className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1 flex-1"
               />
@@ -162,7 +162,7 @@ const AddEditTask = ({
             <ul className="list-disc pl-5">
               {subtasks.map((subtask, index) => (
                 <li key={index} className="flex items-center">
-                  {subtask}
+                  {subtask.text}
                   <button
                     onClick={() => removeSubtask(index)}
                     className="ml-2 text-gray-500 font-semibold text-xs"

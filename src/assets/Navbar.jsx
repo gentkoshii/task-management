@@ -5,31 +5,25 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [initial, setInitial] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [profilePic, setProfilePic] = useState(
+    "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      setIsLoggedIn(true);
-    } else {
       setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
     }
-    fetchName();
-  }, []);
 
-  const fetchName = async (e) => {
-    try {
-      const response = await fetch("http://localhost:3000/users");
-      if (response.ok) {
-        const data = await response.json();
-        const userName = data.email;
-        setInitial(userName.trim().charAt(0).toUpperCase());
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+    // Get profile picture from LocalStorage if exists
+    const userObject = JSON.parse(localStorage.getItem("user"));
+    if (userObject && userObject.ProfilePicture) {
+      setProfilePic(userObject.ProfilePicture);
     }
-  };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -97,9 +91,11 @@ const Navbar = () => {
                 />
               </button>
               <button className="">
-                <div className="h-7 w-7 flex justify-center bg-red-400 rounded-full border-1 border-black p-[2px]">
-                  <p>{initial}</p>
-                </div>
+                <img
+                  src={profilePic}
+                  alt="notifications"
+                  className={`${icon}`}
+                />
               </button>
               <button className="" onClick={handleLogout}>
                 <img

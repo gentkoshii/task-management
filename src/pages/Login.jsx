@@ -14,10 +14,13 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("url", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://impala-noted-needlessly.ngrok-free.app/api/user/login",
+        {
+          email,
+          password,
+        }
+      );
       console.log("response", response.data);
 
       if (response.status === 200) {

@@ -6,7 +6,7 @@ const InviteMembers = ({ setOpenInviteMembers, onSaveInvitation }) => {
   const [email, setEmail] = useState("");
 
   const handleSendInvitation = () => {
-    if (!email || !role) {
+    if (!email) {
       alert("Please fill in all fields");
       return;
     }

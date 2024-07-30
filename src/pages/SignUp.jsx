@@ -16,12 +16,15 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/users", {
-        name,
-        lastName,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://impala-noted-needlessly.ngrok-free.app/api/user/register",
+        {
+          name,
+          lastName,
+          email,
+          password,
+        }
+      );
       if (response.status == 200) {
         navigate("/login");
         console.log("Sign up successful:", response.data);

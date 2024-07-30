@@ -5,11 +5,34 @@ import Dashboard from "./User/Dashboard";
 import Projects from "./User/Projects";
 
 const User = () => {
+  const apiURL = "http://localhost:5000/api/user";
+
   const [activeLink, setActiveLink] = useState("dashboard");
+  const [name, setName] = useState("Anonymous");
+  const [profilePic, setProfilePic] = useState(
+    "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
+  };
+
+  const requestHeaders = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+
+  const getUserProfile = () => {
+    axios
+      .post(`http://localhost:5000/api/user/profile`, {
+        headers: requestHeaders,
+      })
+      .then((response) => {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        setName(response.data.FirstName + " " + response.data.LastName);
+        setProfilePic(response.data.ProfilePicture);
+      });
   };
 
   return (
@@ -20,12 +43,12 @@ const User = () => {
         <div className="fixed top-30 left-10 w-80 bg-[#FFDF92] border-1 border-[#FFE5A8] py-5 pl-8 h-[800px] rounded-lg flex flex-col justify-between gap-6">
           <div className="flex items-center gap-6">
             <img
-              src="user-avatar.png"
+              src={profilePic}
+              title="Profile Picture"
               alt="avatar"
               className="h-8 w-8 rounded-full p-[3px] border-1 border-black"
             />
-            <p className="text-md">{name}</p>{" "}
-            {/* Replace with actual username */}
+            <p className="text-md">{name}</p>
           </div>
           <div className="flex flex-col py-24 gap-1">
             <Link
@@ -46,12 +69,13 @@ const User = () => {
             </Link>
           </div>
           <div>
-            <button onClick={handleLogout}>
+            <button onClick={handleLogout} className="flex gap-2">
               <img
                 src="logout.png"
                 alt="logout"
                 className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
               />
+              Sign Out
             </button>
           </div>
         </div>

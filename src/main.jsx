@@ -14,6 +14,7 @@ import Admin from "./pages/Admin.jsx";
 import User from "./pages/User.jsx";
 import Projects from "./pages/User/Projects.jsx";
 import Board from "./pages/Board.jsx";
+import Search from "./pages/Search.jsx";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/projects/:projectId",
         element: <Board />,
+      },
+      {
+        path: "/search/:searchQuery",
+        element: <Search />,
       },
     ],
   },

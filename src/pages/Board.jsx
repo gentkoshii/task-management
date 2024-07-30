@@ -11,23 +11,26 @@ const Board = () => {
   const [taskType, setTaskType] = useState("add");
   const [tasks, setTasks] = useState([]);
   const [currentTask, setCurrentTask] = useState(null);
-  const [columns, setColumns] = useState(["to do", "in progress", "done"]);
+  const [columns, setColumns] = useState([]);
   const [currentStatus, setCurrentStatus] = useState("");
   const [projectName, setProjectName] = useState("");
   const [openTaskDetails, setOpenTaskDetails] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [newColumn, setNewColumn] = useState("");
   const [openInviteMembers, setOpenInviteMembers] = useState(false);
+  const [members, setMembers] = useState([
+    { FirstName: "John", LastName: "Doe", id: 1 },
+    { FirstName: "Jane", LastName: "Doe", id: 2 },
+    { FirstName: "John", LastName: "Smith", id: 3 },
+    { FirstName: "Jane", LastName: "Smith", id: 4 },
+  ]);
 
   const URL = "http://localhost:3000";
 
   useEffect(() => {
     fetchTasks();
-  }, [projectId]);
-
-  useEffect(() => {
     sortColumns();
-  }, [columns]);
+  }, [projectId, columns]);
 
   const fetchTasks = async () => {
     try {
@@ -38,6 +41,16 @@ const Board = () => {
       setColumns(project.columns || ["to do", "in progress", "done"]);
     } catch (error) {
       console.error("Error fetching tasks:", error);
+    }
+  };
+
+  const getMembers = async () => {
+    try {
+      const response = await axios.get(`${URL}/team/${projectId}/members`);
+      const members = response.data;
+      setMembers(members);
+    } catch (error) {
+      console.error("Error fetching members:", error);
     }
   };
 
@@ -94,20 +107,42 @@ const Board = () => {
 
   const handleSaveComment = async (updatedComments) => {
     const updatedTask = { ...selectedTask, comments: updatedComments };
+
     try {
       await axios.patch(`${URL}/projects/${projectId}`, {
         tasks: tasks.map((task) =>
           task.id === selectedTask.id ? updatedTask : task
         ),
       });
+
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
           task.id === selectedTask.id ? updatedTask : task
         )
       );
+
       setSelectedTask(updatedTask);
     } catch (error) {
       console.error("Error updating comments:", error);
+    }
+  };
+
+  const handleSaveSubtasks = async (updatedSubtasks) => {
+    const updatedTask = { ...selectedTask, subtasks: updatedSubtasks };
+    try {
+      await axios.patch(`${URL}/projects/${projectId}`, {
+        tasks: tasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task
+        ),
+      });
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task
+        )
+      );
+      setSelectedTask(updatedTask);
+    } catch (error) {
+      console.error("Error saving subtasks:", error);
     }
   };
 
@@ -140,7 +175,7 @@ const Board = () => {
             <div className="list-disc capitalize">
               {task.subtasks.map((subtask, index) => (
                 <p key={index} className="flex items-left">
-                  {subtask}
+                  {subtask.text}
                 </p>
               ))}
             </div>
@@ -179,6 +214,10 @@ const Board = () => {
       const updatedColumns = [...columns, newColumn];
       setColumns(updatedColumns);
       setNewColumn("");
+      localStorage.setItem(
+        "columns-" + projectId,
+        JSON.stringify(updatedColumns)
+      );
       try {
         await axios.patch(`${URL}/projects/${projectId}`, {
           columns: updatedColumns,
@@ -191,30 +230,48 @@ const Board = () => {
   };
 
   const sortColumns = () => {
-    const fixedOrder = [
+    const sortLikeThis = [
       "to do",
+      "in progress",
       "in review",
       "accepted",
-      "in progress",
       "done",
     ];
 
-    const sortedColumns = fixedOrder
-      .filter((col) => columns.includes(col))
-      .concat(columns.filter((col) => !fixedOrder.includes(col)));
+    const fixedOrder = ["to do", "in progress", "done"];
+
+    let storedColumns = localStorage.getItem("columns-" + projectId);
+    let sortedColumns;
+
+    if (storedColumns) {
+      sortedColumns = JSON.parse(storedColumns);
+    } else {
+      sortedColumns = fixedOrder;
+      localStorage.setItem(
+        "columns-" + projectId,
+        JSON.stringify(sortedColumns)
+      );
+    }
+
+    sortedColumns.sort((a, b) => {
+      const orderA = sortLikeThis.indexOf(a);
+      const orderB = sortLikeThis.indexOf(b);
+      return orderA - orderB;
+    });
 
     setColumns(sortedColumns);
   };
 
   return (
     <div className="min-h-[65.6vh] flex flex-col justify-between overflow-hidden">
+      {console.log("test")}
       <div className="px-4">
         <p className="text-xl font-semibold">Project: {projectName}</p>
-        <div className="flex items-center gap-2 my-3">
+        <div className="flex items-center gap-3 my-4">
           <select
             value={newColumn}
             onChange={(e) => setNewColumn(e.target.value)}
-            className="mr-2 border py-2 px-1 rounded"
+            className="border py-2 px-1 rounded"
           >
             <option value="">Select Column</option>
             <option value="in review">In Review</option>
@@ -222,16 +279,20 @@ const Board = () => {
           </select>
           <button
             onClick={addColumn}
-            className="bg-[#ffe7ae] text-black px-3 py-2 rounded"
+            className="bg-[#ffe7ae] text-xl text-black px-3 py-2 rounded"
           >
-            Add Column
+            +
           </button>
           <button
-            onClick={() => setOpenInviteMembers(true)} // Updated to set true correctly
-            className="bg-[#ffe7ae] text-black px-3 py-2 rounded"
+            onClick={() => setOpenInviteMembers(true)}
+            className=" bg-[#ffe7ae] text-black px-3 py-2 rounded"
           >
             Invite Members
           </button>
+          <div className=" text-black px-3 py-2 rounded border">
+            Members:{" "}
+            {members && members.map((member) => member.FirstName).join(", ")}
+          </div>
         </div>
       </div>
       <div className="flex overflow-x-auto pb-12">
@@ -269,12 +330,14 @@ const Board = () => {
           task={selectedTask}
           setOpenTaskDetails={setOpenTaskDetails}
           onSaveComment={handleSaveComment}
+          onSaveSubtasks={handleSaveSubtasks}
+          members={members}
         />
       )}
 
       {openInviteMembers && (
         <InviteMembers
-          setOpenInviteMembers={setOpenInviteMembers} // Pass close handler
+          setOpenInviteMembers={setOpenInviteMembers}
           projectId={projectId}
         />
       )}

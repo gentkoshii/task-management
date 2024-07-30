@@ -22,14 +22,14 @@ const Projects = () => {
       .catch((error) => console.error("Error fetching projects:", error));
   };
 
-  const handleSaveProject = () => {
+  const handleSaveProject = async () => {
     const newProject = {
       name: newProjectName,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
-    axios
+    await axios
       .post(`${URL}/projects`, newProject)
       .then((response) => {
         setProjects([...projects, response.data]);
@@ -74,7 +74,7 @@ const Projects = () => {
         {projects.map((project) => (
           <div
             key={project.id}
-            onClick={() => handleClick(project.id)} // Ensure this is correctly navigating
+            onClick={() => handleClick(project.id)}
             className=" bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)]  min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer hover:-translate-y-1"
           >
             <div className="text-xl text-black font-semibold">

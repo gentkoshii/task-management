@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
 
-const TaskDetailsModal = ({ task, setOpenTaskDetails, onSaveComment }) => {
+const TaskDetailsModal = ({
+  task,
+  setOpenTaskDetails,
+  onSaveComment,
+  onSaveSubtasks,
+  members,
+}) => {
   const [comments, setComments] = useState(task.comments || []);
   const [newComment, setNewComment] = useState("");
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [subtasks, setSubtasks] = useState(task.subtasks || []);
+  const [membersA, setMembersA] = useState(members || []);
+  const [assignedMembers, setAssignedMembers] = useState([]);
 
   useEffect(() => {
     setComments(task.comments || []);
-    // Initialize subtasks
     setSubtasks(
       task.subtasks
         ? task.subtasks.map((subtask) => ({
-            text: subtask,
-            completed: false,
+            text: subtask.text,
+            completed: subtask.completed,
           }))
         : []
     );
@@ -34,6 +41,14 @@ const TaskDetailsModal = ({ task, setOpenTaskDetails, onSaveComment }) => {
       i === index ? { ...subtask, completed: !subtask.completed } : subtask
     );
     setSubtasks(updatedSubtasks);
+    onSaveSubtasks(updatedSubtasks); // Notify parent about the change
+  };
+
+  const assingMember = (e) => {
+    const member = e.target.value;
+    if (member) {
+      setAssignedMembers([...assignedMembers, member]);
+    }
   };
 
   return (
@@ -145,6 +160,38 @@ const TaskDetailsModal = ({ task, setOpenTaskDetails, onSaveComment }) => {
               </ul>
             ) : (
               <p className="text-sm text-gray-500">No comments yet.</p>
+            )}
+          </div>
+        </div>
+        <div className="mt-4">
+          <h4 className="text-base font-semibold">Assigned Members</h4>
+          <div className="flex items-center gap-3 my-4">
+            <select
+              value=""
+              onChange={assingMember}
+              className="border py-2 px-1 rounded"
+            >
+              <option value="">Assign Member</option>
+              {membersA.map((member, index) => (
+                <option key={index} value={member.FirstName}>
+                  {member.FirstName} {member.LastName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            {assignedMembers.map((member, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-gray-100 px-2 py-1 rounded"
+              >
+                <span>{member}</span>
+                <button className="text-red-500 text-sm">X</button>
+              </div>
+            ))}
+
+            {assignedMembers.length === 0 && (
+              <p className="text-sm text-gray-500">No members assigned yet.</p>
             )}
           </div>
         </div>
