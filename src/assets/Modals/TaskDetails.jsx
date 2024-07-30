@@ -51,6 +51,12 @@ const TaskDetailsModal = ({
     }
   };
 
+  const handleRemoveMember = (member) => {
+    setAssignedMembers(
+      assignedMembers.filter((assignedMember) => assignedMember !== member)
+    );
+  };
+
   return (
     <div
       onClick={(e) => {
@@ -186,7 +192,12 @@ const TaskDetailsModal = ({
                 className="flex items-center gap-2 bg-gray-100 px-2 py-1 rounded"
               >
                 <span>{member}</span>
-                <button className="text-red-500 text-sm">X</button>
+                <button
+                  onClick={() => handleRemoveMember(member)}
+                  className="text-red-500 text-sm"
+                >
+                  X
+                </button>
               </div>
             ))}
 
