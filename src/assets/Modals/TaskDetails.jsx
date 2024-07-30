@@ -11,7 +11,7 @@ const TaskDetails = ({
   const [newComment, setNewComment] = useState("");
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [subtasks, setSubtasks] = useState(task.subtasks || []);
-  const [membersAll, setMembersAll] = useState(members || []);
+  const [allMembers, setallMembers] = useState(members || []);
   const [assignedMembers, setAssignedMembers] = useState([]);
 
   useEffect(() => {
@@ -178,7 +178,7 @@ const TaskDetails = ({
               className="border py-2 px-1 rounded"
             >
               <option value="">Assign Member</option>
-              {membersAll.map((member, index) => (
+              {allMembers.map((member, index) => (
                 <option key={index} value={member.FirstName}>
                   {member.FirstName} {member.LastName}
                 </option>

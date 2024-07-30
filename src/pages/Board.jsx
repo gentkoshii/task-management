@@ -30,7 +30,7 @@ const Board = () => {
   useEffect(() => {
     fetchTasks();
     sortColumns();
-  }, [projectId, columns]);
+  }, [projectId, members, tasks]);
 
   const fetchTasks = async () => {
     try {
@@ -264,7 +264,6 @@ const Board = () => {
 
   return (
     <div className="min-h-[65.6vh] flex flex-col justify-between overflow-hidden">
-      {console.log("test")}
       <div className="px-4">
         <p className="text-xl font-semibold">Project: {projectName}</p>
         <div className="flex items-center gap-3 my-4">

@@ -8,7 +8,7 @@ const Notifications = ({ userId }) => {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/notifications?userId=${userId}`
+          `https://localhost:7001/api/notification`
         );
         setNotifications(response.data);
       } catch (error) {
