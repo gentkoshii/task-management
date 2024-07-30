@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const TaskDetailsModal = ({
+const TaskDetails = ({
   task,
   setOpenTaskDetails,
   onSaveComment,
@@ -11,7 +11,7 @@ const TaskDetailsModal = ({
   const [newComment, setNewComment] = useState("");
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [subtasks, setSubtasks] = useState(task.subtasks || []);
-  const [membersA, setMembersA] = useState(members || []);
+  const [membersAll, setMembersAll] = useState(members || []);
   const [assignedMembers, setAssignedMembers] = useState([]);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const TaskDetailsModal = ({
     onSaveSubtasks(updatedSubtasks); // Notify parent about the change
   };
 
-  const assingMember = (e) => {
+  const assignMember = (e) => {
     const member = e.target.value;
     if (member) {
       setAssignedMembers([...assignedMembers, member]);
@@ -174,11 +174,11 @@ const TaskDetailsModal = ({
           <div className="flex items-center gap-3 my-4">
             <select
               value=""
-              onChange={assingMember}
+              onChange={assignMember}
               className="border py-2 px-1 rounded"
             >
               <option value="">Assign Member</option>
-              {membersA.map((member, index) => (
+              {membersAll.map((member, index) => (
                 <option key={index} value={member.FirstName}>
                   {member.FirstName} {member.LastName}
                 </option>
@@ -211,4 +211,4 @@ const TaskDetailsModal = ({
   );
 };
 
-export default TaskDetailsModal;
+export default TaskDetails;

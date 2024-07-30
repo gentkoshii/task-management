@@ -5,12 +5,10 @@ import Dashboard from "./User/Dashboard";
 import Projects from "./User/Projects";
 
 const User = () => {
-  const apiURL = "http://localhost:5000/api/user";
-
   const [activeLink, setActiveLink] = useState("dashboard");
   const [name, setName] = useState("Anonymous");
   const [profilePic, setProfilePic] = useState(
-    "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+    "../../../public/user-avatar.png"
   );
 
   const handleLogout = () => {

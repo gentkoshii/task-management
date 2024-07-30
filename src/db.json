@@ -19,22 +19,12 @@
       "name": "test",
       "createdAt": "2024-07-28T15:44:50.882Z",
       "updatedAt": "2024-07-28T15:44:50.882Z",
-      "columns": [
-        "to do",
-        "in progress",
-        "in review",
-        "done",
-        "accepted"
-      ],
+      "columns": ["to do", "in progress", "in review", "done", "accepted"],
       "tasks": [
         {
           "title": "Test",
           "description": "This is a description for testing",
-          "tags": [
-            "TestTag",
-            "bug",
-            "project"
-          ],
+          "tags": ["TestTag", "bug", "project"],
           "subtasks": [
             {
               "text": "Add members",
@@ -51,6 +41,7 @@
           "reminder": "",
           "timeTracking": "",
           "file": null,
+          "assignedMembers": ["da7a", "71cb"],
           "id": "glbwsjewa"
         }
       ]

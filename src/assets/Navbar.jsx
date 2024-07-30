@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Notifications from "./Modals/Notifications";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [profilePic, setProfilePic] = useState(
-    "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+    "../../../public/user-avatar.png"
   );
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,10 +20,13 @@ const Navbar = () => {
       setIsLoggedIn(true);
     }
 
-    // Get profile picture from LocalStorage if exists
     const userObject = JSON.parse(localStorage.getItem("user"));
-    if (userObject && userObject.ProfilePicture) {
-      setProfilePic(userObject.ProfilePicture);
+
+    if (userObject) {
+      setUserId(userObject.id || "");
+      if (userObject.ProfilePicture) {
+        setProfilePic(userObject.ProfilePicture);
+      }
     }
   }, []);
 
@@ -29,6 +34,17 @@ const Navbar = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/login");
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+  // Handle form submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // Prevents the default form submission behavior
+    if (searchQuery.trim()) {
+      navigate(`/search/${encodeURIComponent(searchQuery)}`); // Redirects to search results page
+    }
   };
 
   const icon = "h-7 rounded-full cursor-pointer border-1 border-black p-[2px]";
@@ -69,11 +85,16 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-3">
-          <input
-            className="w-40 border-[1px] border-black rounded-md"
-            type="text"
-            placeholder="Search..."
-          />
+          <form onSubmit={handleSearchSubmit} className="flex">
+            <input
+              className="w-40 border-[1px] border-black rounded-md"
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+            />
+          </form>
           <button>
             <img
               src="../../../public/dark-mode.png"
@@ -83,19 +104,17 @@ const Navbar = () => {
           </button>
           {isLoggedIn ? (
             <div className="flex items-center gap-3">
-              <button className="">
+              <button onClick={toggleNotifications}>
                 <img
                   src="../../../public/bell-ring.png"
                   alt="notifications"
                   className={`${icon}`}
                 />
               </button>
+
+              {showNotifications && <Notifications userId={userId} />}
               <button className="">
-                <img
-                  src={profilePic}
-                  alt="notifications"
-                  className={`${icon}`}
-                />
+                <img src={profilePic} alt="profile" className={`${icon}`} />
               </button>
               <button className="" onClick={handleLogout}>
                 <img
