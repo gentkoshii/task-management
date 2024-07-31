@@ -1,11 +1,65 @@
-import './AboutUs.scss';
+import { Link } from "react-router-dom";
+import React from 'react';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const AboutUs = () => {
-    return ( 
-        <div className="about-us">
-            <h1>This is the About Us page</h1>
+    const button = 'w-56 h-12 border-[1px] border-black rounded-5 text-xl text-black';
+    const gradientStyle = {
+        background: 'radial-gradient(circle at bottom left, #FFB0B0, #FFEFE3 60%)',
+        backgroundSize: 'cover'
+    };
+
+    return (
+        <div className="w-screen h-full flex flex-col items-center justify-center gap-28 pt-28 pb-28 overflow-hidden" style={gradientStyle}>
+            <div className="w-[55%] h-full flex flex-col gap-6 relative">
+
+                <div className="flex justify-between items-start w-full mb-9">
+                    <div className="flex flex-col gap-3">
+                        <h1 className="text-4xl font-bold mb-1">About TaskFlow</h1>
+                        <p className="text-lg text-gray-700">What’s behind the boards.</p>
+                    </div>
+                    <div className="header-img w-[30%]">
+                        <img src="Screenshot_4-Photoroom.png" alt="icon" className="w-full h-auto"/>
+                    </div>
+                </div>
+                
+                <p className="text-4xl font-bold mb-1">
+                    The way your team works is <br />unique — so is TaskFlow.
+                </p>
+                <p className="text-gray-700">
+                    TaskFlow is the flexible work management tool where teams can ideate plans, collaborate on projects, organize workflows, and track progress in a visual, productive, and rewarding way.
+                    From brainstorm to planning to execution, TaskFlow manages the big milestones and the day-to-day tasks of working together and getting things done.
+                </p>
+        
+            </div>
+
+            <div className="w-[55%] h-full flex flex-col gap-2">
+                <h2 className="text-2xl font-bold mb-2">A Brief History of TaskFlow</h2>
+                <p className="text-gray-700">
+                    Founded in 2023, TaskFlow emerged from the collective vision of a group of dedicated professionals who recognized the need for a more intuitive and effective task management solution. Frustrated with the complexity and limitations of existing tools, our team set out to create a platform that prioritizes user experience, flexibility, and seamless collaboration.
+                    Over the years, we have continually refined and expanded our features, guided by the feedback and needs of our growing community of users. Today, TaskFlow stands as a testament to our commitment to innovation and excellence in task management.
+                </p>
+            </div>
+
+            <div className="w-[55%] h-full flex flex-col gap-2">
+                <h2 className="text-2xl mb-2">Millions of people and companies of all kinds and sizes love using TaskFlow.</h2>
+                <p className="text-gray-700">
+                    TaskFlow has quickly become a favorite among individuals and organizations worldwide.
+                </p>
+                <p className="text-gray-700">
+                    With its robust set of features and ease of use, TaskFlow caters to the diverse needs of millions of users across various industries. From freelancers managing their daily tasks to large enterprises overseeing complex projects.
+                </p>
+                <div className="flex justify-center gap-5 mt-6 " >
+                    <a href="#" className="text-2xl text-black"><i className="fab fa-twitter"></i></a>
+                    <a href="#" className="text-2xl text-black"><i className="fab fa-google"></i></a>
+                    <a href="#" className="text-2xl text-black"><i className="fab fa-instagram"></i></a>
+                    <a href="#" className="text-2xl text-black"><i className="fab fa-youtube"></i></a>
+                    <a href="#" className="text-2xl text-black"><i className="fab fa-facebook"></i></a>
+                </div>
+            </div>
         </div>
-     );
+    );
 }
- 
+
 export default AboutUs;
+

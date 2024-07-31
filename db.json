@@ -1,0 +1,36 @@
+{
+  "contacts": [
+    {
+      "id": "bd6a",
+      "firstName": "Lejdina",
+      "lastName": "Franca",
+      "email": "lejdinefranca22@gmail.com",
+      "phone": "043712760",
+      "message": "This is a test message!"
+    },
+    {
+      "id": "613f",
+      "firstName": "",
+      "lastName": "",
+      "email": "",
+      "phone": "",
+      "message": ""
+    },
+    {
+      "id": "7673",
+      "firstName": "Lejdina",
+      "lastName": "Franca",
+      "email": "lejdinefranca22@gmail.com",
+      "phone": "043111222",
+      "message": "Hi"
+    },
+    {
+      "id": "5229",
+      "firstName": "Lejdina",
+      "lastName": "Franca",
+      "email": "lejdinefranca@gmail.com",
+      "phone": "043777888",
+      "message": "Hey there!"
+    }
+  ]
+}
