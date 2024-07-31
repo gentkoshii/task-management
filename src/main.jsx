@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import App from './App.jsx';
+import Homepage from './pages/Homepage.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import Help from './pages/Help.jsx';
 import Features from './pages/Features.jsx';
@@ -9,14 +10,18 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
 import AdminLayout from './assets/Admin/AdminLayout.jsx';
-import Homepage from './pages/Homepage.jsx';
-import Boards from './pages/Boards.jsx';
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Users from "./assets/Admin/Users.jsx";
 import Dashboard from './assets/Admin/SidebarItems/Dashboard.jsx';
+import Users from "./assets/Admin/Users.jsx";
 import Profile from './assets/Admin/SidebarItems/Profile.jsx';
 import ContactMessages from './assets/Admin/SidebarItems/ContactMessages.jsx';
+import Boards from './pages/Boards.jsx';
+import Admin from './pages/Admin.jsx';
+import User from './pages/User.jsx';
+import Projects from './pages/User/Projects.jsx';
+import Board from './pages/Board.jsx';
+import Search from './pages/Search.jsx';
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
   {
@@ -42,7 +47,18 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "signup", element: <SignUp /> },
       { path: "boards", element: <Boards /> },
+      { path: "projects", element: <Projects /> },
+      { path: "projects/:projectId", element: <Board /> },
+      { path: "search/:searchQuery", element: <Search /> },
     ]
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+  },
+  {
+    path: "/user",
+    element: <User />,
   },
 ]);
 

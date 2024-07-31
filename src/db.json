@@ -1,0 +1,50 @@
+{
+  "users": [
+    {
+      "id": "da7a",
+      "email": "gentkoshi@gmail.com",
+      "password": "12345678"
+    },
+    {
+      "id": "71cb",
+      "name": "",
+      "lastName": "",
+      "email": "",
+      "password": ""
+    }
+  ],
+  "projects": [
+    {
+      "id": "1014",
+      "name": "test",
+      "createdAt": "2024-07-28T15:44:50.882Z",
+      "updatedAt": "2024-07-28T15:44:50.882Z",
+      "columns": ["to do", "in progress", "in review", "done", "accepted"],
+      "tasks": [
+        {
+          "title": "Test",
+          "description": "This is a description for testing",
+          "tags": ["TestTag", "bug", "project"],
+          "subtasks": [
+            {
+              "text": "Add members",
+              "completed": true
+            },
+            {
+              "text": "Notifications",
+              "completed": false
+            }
+          ],
+          "priority": "Normal",
+          "dueDate": "2024-07-29",
+          "status": "to do",
+          "reminder": "",
+          "timeTracking": "",
+          "file": null,
+          "assignedMembers": [],
+          "id": "glbwsjewa"
+        }
+      ]
+    }
+  ]
+}
