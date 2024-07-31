@@ -1,4 +1,3 @@
-import './Contact.scss';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Popup from '../components/Popup';

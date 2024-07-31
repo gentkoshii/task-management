@@ -14,8 +14,6 @@ import Dashboard from './assets/Admin/SidebarItems/Dashboard.jsx';
 import Users from "./assets/Admin/Users.jsx";
 import Profile from './assets/Admin/SidebarItems/Profile.jsx';
 import ContactMessages from './assets/Admin/SidebarItems/ContactMessages.jsx';
-import Boards from './pages/Boards.jsx';
-import Admin from './pages/Admin.jsx';
 import User from './pages/User.jsx';
 import Projects from './pages/User/Projects.jsx';
 import Board from './pages/Board.jsx';
@@ -46,15 +44,10 @@ const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <SignUp /> },
-      { path: "boards", element: <Boards /> },
       { path: "projects", element: <Projects /> },
       { path: "projects/:projectId", element: <Board /> },
       { path: "search/:searchQuery", element: <Search /> },
     ]
-  },
-  {
-    path: "/admin",
-    element: <Admin />,
   },
   {
     path: "/user",

@@ -42,9 +42,6 @@ function Login() {
 
   return (
     <div className="h-lvh flex flex-col justify-between">
-      <div>
-        <Navbar />
-      </div>
       <div className={`${display} h-full`}>
         <div className={`${display} w-[400px] h-[500px] rounded-4`}>
           <form
