@@ -4,13 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./App.jsx";
 import Homepage from "./pages/Homepage.jsx";
-import AboutUs from "./pages/AboutUs.jsx";
 import Help from "./pages/Help.jsx";
-import Features from "./pages/Features.jsx";
-import Contact from "./pages/Contact.jsx";
 import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
-import Admin from "./pages/Admin.jsx";
 import User from "./pages/User.jsx";
 import Projects from "./pages/User/Projects.jsx";
 import Board from "./pages/Board.jsx";
@@ -27,24 +23,8 @@ const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
-        path: "/about",
-        element: <AboutUs />,
-      },
-      {
         path: "/help",
         element: <Help />,
-      },
-      {
-        path: "/features",
-        element: <Features />,
-      },
-      {
-        path: "/contact",
-        element: <Contact />,
-      },
-      {
-        path: "/admin",
-        element: <Admin />,
       },
       {
         path: "/projects",
