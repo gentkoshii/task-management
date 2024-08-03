@@ -71,13 +71,13 @@ const CardFeatures = () => {
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3 gap-5 justify-center">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-1 md:gap-5 items-center place-items-center justify-center">
         {cardFeatures.map((cardFeature, index) => (
           <div
             key={index}
-            className={`w-[320px] h-96 ${cardFeature.color} p-4 mb-8 flex flex-col justify-center border-[1px] border-black rounded-3xl relative`}
+            className={`w-80 h-96 ${cardFeature.color} p-4 mb-8 flex flex-col items-center justify-center border-[1px] border-black rounded-3xl relative`}
           >
-            <div className="h-24 w-24 mx-auto">
+            <div className="h-24 w-24  ">
               {cardFeature.icon && (
                 <img
                   src={cardFeature.icon}
@@ -92,7 +92,7 @@ const CardFeatures = () => {
                 <p className="mt-2">{cardFeature.description}</p>
               </div>
               <div className="mt-4">
-                <Link to={cardFeature.link}>
+                <Link to={"/features"}>
                   <button className={`${button} ${cardFeature.btnColor}`}>
                     Learn More
                   </button>

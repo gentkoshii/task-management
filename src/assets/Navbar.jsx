@@ -20,7 +20,6 @@ const Navbar = () => {
     }
 
     const userObject = JSON.parse(localStorage.getItem("user"));
-
     if (userObject) {
       setUserId(userObject.id || "");
       if (userObject.profilePicture) {
@@ -51,7 +50,7 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const icon = "h-7 rounded-full cursor-pointer border-1 border-black p-[2px]";
+  const icon = "h-7 w-7 rounded-full cursor-pointer border border-black p-1";
 
   return (
     <div className="flex w-screen justify-center items-center p-[34px]">
@@ -70,30 +69,44 @@ const Navbar = () => {
           <Link to="/" className="text-black no-underline">
             <h5 className="m-0">Home</h5>
           </Link>
-          <Link to="/about" className="text-black no-underline">
-            <h5 className="m-0">About</h5>
+          <Link
+            to="/about"
+            className="text-black no-underline hover:text-blue-600 transition"
+          >
+            <h5 className="m-0 text-lg">About</h5>
           </Link>
-          <Link to="/features" className="text-black no-underline">
-            <h5 className="m-0">Features</h5>
+          <Link
+            to="/features"
+            className="text-black no-underline hover:text-blue-600 transition"
+          >
+            <h5 className="m-0 text-lg">Features</h5>
           </Link>
-          <Link to="/help" className="text-black no-underline">
-            <h5 className="m-0">Help</h5>
+          <Link
+            to="/help"
+            className="text-black no-underline hover:text-blue-600 transition"
+          >
+            <h5 className="m-0 text-lg">Help</h5>
           </Link>
-          <Link to="/contact" className="text-black no-underline">
-            <h5 className="m-0">Contact</h5>
+          <Link
+            to="/contact"
+            className="text-black no-underline hover:text-blue-600 transition"
+          >
+            <h5 className="m-0 text-lg">Contact</h5>
           </Link>
         </div>
 
         <div className="hidden md:flex gap-3">
           <form onSubmit={handleSearchSubmit} className="flex">
             <input
-              className="w-40 border-[1px] border-black rounded-md"
+              className="w-40 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
               type="text"
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
             />
+            <button type="submit" className="hidden">
+              Search
+            </button>
           </form>
           <button>
             <img
