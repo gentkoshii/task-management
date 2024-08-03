@@ -6,15 +6,24 @@ const Dashboard = () => {
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
   const [totalProjectsCount, setTotalProjectsCount] = useState(0);
 
-  const URL = "http://localhost:3000";
-
   useEffect(() => {
     fetchProjects();
   }, []);
 
+  const requestHeaders = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+
   const fetchProjects = async () => {
+    console.log("Fetching projects...");
     try {
-      const response = await axios.get(`${URL}/projects`);
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/my-projects`,
+        {
+          headers: requestHeaders,
+        }
+      );
       const projectsData = response.data;
 
       setProjects(projectsData);

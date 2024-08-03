@@ -10,35 +10,19 @@ const Footer = () => {
       <div className="w-[60%] flex justify-between  items-start text-left pt-4 pb-5 border-i border-t-[1px] border-black ">
         <div className="flex flex-col">
           <div className="flex gap-2">
-            <img
-              src="../../../public/1.png"
-              alt="logo"
-              className="h-9 rounded-md"
-            />
+            <img src="/1.png" alt="logo" className="h-9 rounded-md" />
             <h2 className="font-semibold">TaskFlow</h2>
           </div>
           <div>
             <div className="flex jus gap-2">
               <Link to="/facebook.com">
-                <img
-                  src="../../../public/instagram.png"
-                  alt="icon"
-                  className={`${image}`}
-                />
+                <img src="/instagram.png" alt="icon" className={`${image}`} />
               </Link>
               <Link to="/facebook.com">
-                <img
-                  src="../../../public/facebook.png"
-                  alt="icon"
-                  className={`${image}`}
-                />
+                <img src="/facebook.png" alt="icon" className={`${image}`} />
               </Link>
               <Link to="/">
-                <img
-                  src="../../../public/twitter.png"
-                  alt="icon"
-                  className={`${image}`}
-                />
+                <img src="/twitter.png" alt="icon" className={`${image}`} />
               </Link>
             </div>
           </div>

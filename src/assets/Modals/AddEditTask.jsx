@@ -6,78 +6,52 @@ const AddEditTask = ({
   onSaveTask,
   currentTask,
   column,
+  projectId,
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
-  const [subtasks, setSubtasks] = useState([]);
-  const [newSubtask, setNewSubtask] = useState("");
   const [priority, setPriority] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [reminder, setReminder] = useState("");
-  const [timeTracking, setTimeTracking] = useState("");
-  const [file, setFile] = useState(null);
-  const [fileError, setFileError] = useState("");
+  const [dueDate, setDueDate] = useState(currentTask?.dueDate || "");
 
   useEffect(() => {
     if (type === "edit" && currentTask) {
       setTitle(currentTask.title);
       setDescription(currentTask.description);
       setTags(currentTask.tags ? currentTask.tags.join(", ") : "");
-      setSubtasks(currentTask.subtasks || []);
       setPriority(currentTask.priority);
-      setDueDate(currentTask.dueDate);
-      setReminder(currentTask.reminder || "");
-      setTimeTracking(currentTask.timeTracking || "");
-      setFile(null);
+
+      let dateFormatted = new Date(currentTask.dueDate);
+      dateFormatted = dateFormatted.toISOString().split("T")[0];
+      setDueDate(dateFormatted);
     }
   }, [type, currentTask]);
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const maxSize = 8 * 1024 * 1024; // 8MB limit
-      if (selectedFile.size > maxSize) {
-        setFileError("File size should be less than 8MB.");
-        setFile(null);
-      } else {
-        setFileError("");
-        setFile(selectedFile);
-      }
-    }
-  };
-
   const handleSave = () => {
-    // Validate required fields
     if (!title || !dueDate) {
       alert("Title and Due Date are required.");
       return;
     }
 
+    let statusBoard;
+    if (column === "to do") {
+      statusBoard = 0;
+    } else if (column === "in progress") {
+      statusBoard = 1;
+    } else {
+      statusBoard = 2;
+    }
+
     const task = {
       title,
       description,
-      tags: tags.split(",").map((tag) => tag.trim()), // Convert comma-separated string to array
-      subtasks,
-      priority,
+      tags: tags.length > 0 ? tags.split(",").map((tag) => tag.trim()) : [],
+      priority: Number(priority),
       dueDate,
-      status: column,
-      reminder,
-      timeTracking,
-      file,
+      status: statusBoard,
+      projectId,
     };
     onSaveTask(task);
-  };
-
-  const addSubtask = () => {
-    if (newSubtask) {
-      setSubtasks([...subtasks, { text: newSubtask, completed: false }]);
-      setNewSubtask("");
-    }
-  };
-
-  const removeSubtask = (index) => {
-    setSubtasks(subtasks.filter((_, i) => i !== index));
   };
 
   return (
@@ -139,56 +113,6 @@ const AddEditTask = ({
           />
         </div>
         <div className="mt-3 flex flex-col space-y-1">
-          <label htmlFor="subtasks" className="text-sm">
-            Subtasks
-          </label>
-          <div className="flex flex-col space-y-2">
-            <div className="flex items-center">
-              <input
-                id="newSubtask"
-                type="text"
-                placeholder="New subtask"
-                value={newSubtask.text}
-                onChange={(e) => setNewSubtask(e.target.value)}
-                className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1 flex-1"
-              />
-              <button
-                onClick={addSubtask}
-                className="ml-2 px-3 py-1 bg-[#FFDF92] text-black rounded-md text-sm"
-              >
-                Add
-              </button>
-            </div>
-            <ul className="list-disc pl-5">
-              {subtasks.map((subtask, index) => (
-                <li key={index} className="flex items-center">
-                  {subtask.text}
-                  <button
-                    onClick={() => removeSubtask(index)}
-                    className="ml-2 text-gray-500 font-semibold text-xs"
-                  >
-                    X
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="mt-3 flex flex-col space-y-1">
-          <label htmlFor="file" className="text-sm">
-            Attach File (Max 8MB)
-          </label>
-          <input
-            id="file"
-            type="file"
-            onChange={handleFileChange}
-            className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
-          />
-          {fileError && (
-            <p className="text-red-500 text-xs mt-1">{fileError}</p>
-          )}
-        </div>
-        <div className="mt-3 flex flex-col space-y-1">
           <label htmlFor="priority" className="text-sm">
             Priority
           </label>
@@ -199,9 +123,10 @@ const AddEditTask = ({
             className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
           >
             <option value="">Select Priority</option>
-            <option value="Normal">Normal</option>
-            <option value="Important">Important</option>
-            <option value="Critical">Critical</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+            <option value="4">Critical</option>
           </select>
         </div>
         <div className="mt-3 flex flex-col space-y-1">
@@ -213,31 +138,6 @@ const AddEditTask = ({
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
-          />
-        </div>
-        <div className="mt-3 flex flex-col space-y-1">
-          <label htmlFor="reminder" className="text-sm">
-            Reminder
-          </label>
-          <input
-            id="reminder"
-            type="datetime-local"
-            value={reminder}
-            onChange={(e) => setReminder(e.target.value)}
-            className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
-          />
-        </div>
-        <div className="mt-3 flex flex-col space-y-1">
-          <label htmlFor="timeTracking" className="text-sm">
-            Time Tracking
-          </label>
-          <input
-            id="timeTracking"
-            type="text"
-            placeholder="e.g. 2 hours"
-            value={timeTracking}
-            onChange={(e) => setTimeTracking(e.target.value)}
             className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
           />
         </div>

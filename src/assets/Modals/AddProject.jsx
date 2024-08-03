@@ -1,6 +1,13 @@
 import React from "react";
 
-function AddProject({ projectName, setProjectName, onSaveProject, onCancel }) {
+function AddProject({
+  projectName,
+  setProjectName,
+  projectDescription,
+  setProjectDescription,
+  onSaveProject,
+  onCancel,
+}) {
   const handleSave = () => {
     onSaveProject();
   };
@@ -29,6 +36,18 @@ function AddProject({ projectName, setProjectName, onSaveProject, onCancel }) {
             placeholder="e.g New Website Project"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
+            className="bg-transparent px-4 py-2 outline-none focus:border-0 rounded-md text-sm 
+          border border-gray-500 focus:outline-[#FFDF92] ring-1"
+          />
+          <label htmlFor="projectDescription" className="text-sm">
+            Project Description
+          </label>
+          <input
+            id="projectDescription"
+            type="text"
+            placeholder="e.g This is a website description"
+            value={projectDescription}
+            onChange={(e) => setProjectDescription(e.target.value)}
             className="bg-transparent px-4 py-2 outline-none focus:border-0 rounded-md text-sm 
           border border-gray-500 focus:outline-[#FFDF92] ring-1"
           />

@@ -7,17 +7,24 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
+  const [newProjectDescription, setNewProjectDescription] = useState("");
 
-  const URL = "http://localhost:3000";
   const navigate = useNavigate();
+
+  const requestHeaders = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
-  const fetchProjects = () => {
-    axios
-      .get(`${URL}/projects`)
+  const fetchProjects = async () => {
+    await axios
+      .get(`https://4wvk44j3-7001.euw.devtunnels.ms/api/project/my-projects`, {
+        headers: requestHeaders,
+      })
       .then((response) => setProjects(response.data))
       .catch((error) => console.error("Error fetching projects:", error));
   };
@@ -25,23 +32,34 @@ const Projects = () => {
   const handleSaveProject = async () => {
     const newProject = {
       name: newProjectName,
+      description: newProjectDescription,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
-    await axios
-      .post(`${URL}/projects`, newProject)
-      .then((response) => {
-        setProjects([...projects, response.data]);
-        setIsAddProjectOpen(false);
-        setNewProjectName("");
-      })
-      .catch((error) => console.error("Error creating project:", error));
+    try {
+      const response = await axios.post(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project`,
+        newProject,
+        { headers: requestHeaders }
+      );
+      setProjects([...projects, response.data]);
+      setIsAddProjectOpen(false);
+      setNewProjectName("");
+      setNewProjectDescription("");
+    } catch (error) {
+      console.error("Error creating project:", error);
+    }
   };
 
-  const handleDeleteProject = (projectId) => {
-    axios
-      .delete(`${URL}/projects/${projectId}`)
+  const handleDeleteProject = async (projectId) => {
+    await axios
+      .delete(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}`,
+        {
+          headers: requestHeaders,
+        }
+      )
       .then(() => {
         setProjects(projects.filter((project) => project.id !== projectId));
       })
@@ -65,6 +83,8 @@ const Projects = () => {
           <AddProject
             projectName={newProjectName}
             setProjectName={setNewProjectName}
+            projectDescription={newProjectDescription}
+            setProjectDescription={setNewProjectDescription}
             onSaveProject={handleSaveProject}
             onCancel={() => setIsAddProjectOpen(false)}
           />
