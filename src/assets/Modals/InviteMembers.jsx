@@ -1,25 +1,39 @@
-// src/assets/Modals/InviteMembers.jsx
 import React, { useState } from "react";
 import axios from "axios";
 
-const InviteMembers = ({ setOpenInviteMembers, onSaveInvitation }) => {
+const InviteMembers = ({ setOpenInviteMembers }) => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSendInvitation = () => {
+  const handleSendInvitation = async () => {
     if (!email) {
       alert("Please fill in all fields");
       return;
     }
 
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
     const invitation = { email };
 
-    axios
-      .post("url", invitation)
-      .then(() => {
-        onSaveInvitation(invitation);
-        setOpenInviteMembers(false);
-      })
-      .catch((error) => console.error("Error sending invitation:", error));
+    setIsLoading(true);
+
+    try {
+      await axios.post(
+        "https://4wvk44j3-7001.euw.devtunnels.ms/api/invite",
+        invitation
+      );
+      alert("Invitation sent successfully!");
+      setOpenInviteMembers(false);
+    } catch (error) {
+      console.error("Error sending invitation:", error);
+      setError("Failed to send invitation. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,8 +63,9 @@ const InviteMembers = ({ setOpenInviteMembers, onSaveInvitation }) => {
           <button
             onClick={handleSendInvitation}
             className="bg-[#FFDF92] text-black px-4 py-2 rounded hover:bg-[#fde4a8]"
+            disabled={isLoading}
           >
-            Send Invitation
+            {isLoading ? "Sending..." : "Send Invitation"}
           </button>
         </div>
       </div>

@@ -4,53 +4,84 @@ import AddEditTask from "../assets/Modals/AddEditTask";
 import TaskDetails from "../assets/Modals/TaskDetails";
 import InviteMembers from "../assets/Modals/InviteMembers";
 import axios from "axios";
+import AddReminder from "../assets/Modals/AddReminder";
 
 const Board = () => {
-  const { projectId } = useParams();
-  const [openAddEditTask, setOpenAddEditTask] = useState(false);
+  const { projectId: paramProjectId } = useParams();
+  const [projectId, setProjectId] = useState(paramProjectId);
+  const [taskId, setTaskId] = useState();
+  const [projectName, setProjectName] = useState("");
   const [taskType, setTaskType] = useState("add");
   const [tasks, setTasks] = useState([]);
   const [currentTask, setCurrentTask] = useState(null);
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState(["to do", "in progress", "done"]);
   const [currentStatus, setCurrentStatus] = useState("");
-  const [projectName, setProjectName] = useState("");
-  const [openTaskDetails, setOpenTaskDetails] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [newColumn, setNewColumn] = useState("");
+  const [members, setMembers] = useState([]);
+  const [openAddEditTask, setOpenAddEditTask] = useState(false);
+  const [openTaskDetails, setOpenTaskDetails] = useState(false);
   const [openInviteMembers, setOpenInviteMembers] = useState(false);
-  const [members, setMembers] = useState([
-    { FirstName: "John", LastName: "Doe", id: 1 },
-    { FirstName: "Jane", LastName: "Doe", id: 2 },
-    { FirstName: "John", LastName: "Smith", id: 3 },
-    { FirstName: "Jane", LastName: "Smith", id: 4 },
-  ]);
+  const [openAddReminderModal, setOpenAddReminderModal] = useState(false);
+  const [reminderTaskId, setReminderTaskId] = useState(null);
 
-  const URL = "http://localhost:3000";
+  const requestHeaders = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
 
   useEffect(() => {
-    fetchTasks();
-    sortColumns();
-  }, [projectId, members, tasks]);
+    if (projectId) {
+      fetchProject();
+      fetchTasks();
+      getMembers();
+    }
+  }, [projectId]);
 
-  const fetchTasks = async () => {
+  const fetchProject = async () => {
     try {
-      const response = await axios.get(`${URL}/projects/${projectId}`);
+      console.log(
+        `Fetching project: https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}`
+      );
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}`
+      );
       const project = response.data;
       setProjectName(project.name || "Project Name");
-      setTasks(project.tasks || []);
-      setColumns(project.columns || ["to do", "in progress", "done"]);
+      const Columns = await fetchColumns();
+      setColumns(Columns || ["to do", "in progress", "done"]);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching project details:", error);
     }
   };
 
-  const getMembers = async () => {
+  const fetchColumns = async () => {
     try {
-      const response = await axios.get(`${URL}/team/${projectId}/members`);
-      const members = response.data;
-      setMembers(members);
+      console.log(
+        `Fetching columns: https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/columns`
+      );
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/columns`
+      );
+      const columns = response.data;
+      return columns;
     } catch (error) {
-      console.error("Error fetching members:", error);
+      console.error("Error fetching columns:", error);
+    }
+  };
+
+  const handleSaveComment = async (taskId, comment) => {
+    try {
+      await axios.post(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${taskId}/comments`,
+        {
+          text: comment,
+        },
+        { headers: requestHeaders }
+      );
+      fetchTasks();
+    } catch (error) {
+      console.error("Error saving comment:", error);
     }
   };
 
@@ -67,21 +98,72 @@ const Board = () => {
     setOpenAddEditTask(true);
   };
 
+  const handleOpenAddReminder = (task) => {
+    setReminderTaskId(task.id);
+    setOpenAddReminderModal(true);
+  };
+
+  const handleSaveReminder = async (reminder) => {
+    setOpenAddReminderModal(false);
+  };
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setOpenTaskDetails(true);
+  };
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/tasks`
+      );
+      const tasks = response.data.tasks;
+      setTasks(tasks || []);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
   const handleSaveTask = async (task) => {
+    const newTask = { ...task };
     try {
       if (taskType === "add") {
-        const newTask = { ...task, id: generateUniqueId() };
-        await axios.patch(`${URL}/projects/${projectId}`, {
-          tasks: [...tasks, newTask],
-        });
+        await axios
+          .post(
+            `https://4wvk44j3-7001.euw.devtunnels.ms/api/task`,
+            {
+              ...newTask,
+            },
+            { headers: requestHeaders }
+          )
+          .then(() => {
+            fetchTasks();
+          });
         setTasks((prevTasks) => [...prevTasks, newTask]);
       } else {
-        await axios.patch(`${URL}/projects/${projectId}`, {
-          tasks: tasks.map((t) => (t.id === currentTask.id ? task : t)),
-        });
-        setTasks((prevTasks) =>
-          prevTasks.map((t) => (t.id === currentTask.id ? task : t))
-        );
+        let statusBoard;
+        if (currentStatus === "to do") {
+          statusBoard = 0;
+        } else if (currentStatus === "in progress") {
+          statusBoard = 1;
+        } else if (currentStatus === "in review") {
+          statusBoard = 2;
+        } else if (currentStatus === "testing") {
+          statusBoard = 3;
+        } else {
+          statusBoard = 4;
+        }
+        await axios
+          .put(
+            `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${currentTask.id}`,
+            {
+              ...newTask,
+            },
+            { headers: requestHeaders }
+          )
+          .then(() => {
+            fetchTasks();
+          });
       }
       setOpenAddEditTask(false);
     } catch (error) {
@@ -91,69 +173,86 @@ const Board = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios.patch(`${URL}/projects/${projectId}`, {
-        tasks: tasks.filter((task) => task.id !== id),
-      });
+      await axios
+        .delete(`https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${id}`, {
+          headers: requestHeaders,
+        })
+        .then(() => {
+          fetchTasks();
+        });
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
-  const handleTaskClick = (task) => {
-    setSelectedTask(task);
-    setOpenTaskDetails(true);
-  };
-
-  const handleSaveComment = async (updatedComments) => {
-    const updatedTask = { ...selectedTask, comments: updatedComments };
-
+  const getMembers = async () => {
     try {
-      await axios.patch(`${URL}/projects/${projectId}`, {
-        tasks: tasks.map((task) =>
-          task.id === selectedTask.id ? updatedTask : task
-        ),
-      });
-
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === selectedTask.id ? updatedTask : task
-        )
+      console.log(
+        `Fetching members: https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/users`
       );
-
-      setSelectedTask(updatedTask);
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/users`
+      );
+      const members = response.data.users;
+      setMembers(members);
     } catch (error) {
-      console.error("Error updating comments:", error);
+      console.error("Error fetching members:", error);
     }
   };
 
-  const handleSaveSubtasks = async (updatedSubtasks) => {
-    const updatedTask = { ...selectedTask, subtasks: updatedSubtasks };
-    try {
-      await axios.patch(`${URL}/projects/${projectId}`, {
-        tasks: tasks.map((task) =>
-          task.id === updatedTask.id ? updatedTask : task
-        ),
-      });
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === updatedTask.id ? updatedTask : task
-        )
-      );
-      setSelectedTask(updatedTask);
-    } catch (error) {
-      console.error("Error saving subtasks:", error);
+  const addColumn = async () => {
+    if (newColumn && !columns.includes(newColumn)) {
+      try {
+        await axios.post(
+          `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/add-columns`,
+          {
+            projectId: projectId,
+            columnNames: [newColumn],
+          },
+          { headers: requestHeaders }
+        );
+        fetchProject(); // Fetch updated project data
+      } catch (error) {
+        console.error("Error adding column:", error);
+      }
     }
+  };
+
+  const sortColumns = (columns) => {
+    const sortLikeThis = [
+      "to do",
+      "in progress",
+      "in review",
+      "testing",
+      "done",
+    ];
+
+    return columns.sort((a, b) => {
+      const orderA = sortLikeThis.indexOf(a);
+      const orderB = sortLikeThis.indexOf(b);
+      return orderA - orderB;
+    });
   };
 
   const renderTasks = (status) => {
+    const statusMapping = {
+      "to do": 0,
+      "in progress": 1,
+      "in review": 2,
+      testing: 3,
+      done: 4,
+    };
+
+    const statusValue = statusMapping[status];
+
     return tasks
-      .filter((task) => task.status === status)
+      .filter((task) => task.status === statusValue)
       .map((task) => (
         <div
-          key={task.id} // Ensure each task has a unique key
+          key={task.id}
           onClick={() => handleTaskClick(task)}
-          className="mb-3 px-4 py-3 border rounded-lg shadow-md bg-white cursor-pointer hover:bg-gray-100"
+          className="mb-2 px-4 py-2 border rounded-lg shadow-md bg-white cursor-pointer hover:bg-gray-100 relative"
         >
           <h3 className="text-lg font-semibold capitalize">{task.title}</h3>
           <p className="text-gray-600 text-sm overflow-hidden overflow-ellipsis first-letter:uppercase">
@@ -164,102 +263,43 @@ const Board = () => {
               task.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-gray-200 text-gray-800 px-2 rounded-md text-sm  mb-2"
+                  className="bg-gray-200 text-gray-800 px-2 rounded-md text-sm mx-1"
                 >
                   {tag}
                 </span>
               ))}
           </div>
-
-          {task.subtasks && (
-            <div className="list-disc capitalize">
-              {task.subtasks.map((subtask, index) => (
-                <p key={index} className="flex items-left">
-                  {subtask.text}
-                </p>
-              ))}
-            </div>
-          )}
-
-          <div className="flex space-x-3">
+          <div className="flex justify-end absolute top-3 right-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleOpenAddReminder(task);
+              }}
+              className="text-white px-2 rounded"
+            >
+              <img src="/timer.png" alt="reminder-icon" className="w-5" />
+            </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 openEditTask(task);
               }}
-              className="bg-gray-400 text-white px-3 py-1 rounded"
+              className=" text-white  rounded"
             >
-              Edit
+              <img src="/edit.png" alt="edit-icon" className="w-5" />
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 deleteTask(task.id);
               }}
-              className="bg-red-500 text-white px-3 py-1 rounded"
+              className=" text-white px-2 rounded"
             >
-              Delete
+              <img src="/bin.png" alt="delete-icon" className="w-5" />
             </button>
           </div>
         </div>
       ));
-  };
-
-  const generateUniqueId = () => {
-    return Math.random().toString(36).substr(2, 9);
-  };
-
-  const addColumn = async () => {
-    if (newColumn && !columns.includes(newColumn)) {
-      const updatedColumns = [...columns, newColumn];
-      setColumns(updatedColumns);
-      setNewColumn("");
-      localStorage.setItem(
-        "columns-" + projectId,
-        JSON.stringify(updatedColumns)
-      );
-      try {
-        await axios.patch(`${URL}/projects/${projectId}`, {
-          columns: updatedColumns,
-        });
-        await fetchTasks(); // Fetch updated project data
-      } catch (error) {
-        console.error("Error updating columns:", error);
-      }
-    }
-  };
-
-  const sortColumns = () => {
-    const sortLikeThis = [
-      "to do",
-      "in progress",
-      "in review",
-      "accepted",
-      "done",
-    ];
-
-    const fixedOrder = ["to do", "in progress", "done"];
-
-    let storedColumns = localStorage.getItem("columns-" + projectId);
-    let sortedColumns;
-
-    if (storedColumns) {
-      sortedColumns = JSON.parse(storedColumns);
-    } else {
-      sortedColumns = fixedOrder;
-      localStorage.setItem(
-        "columns-" + projectId,
-        JSON.stringify(sortedColumns)
-      );
-    }
-
-    sortedColumns.sort((a, b) => {
-      const orderA = sortLikeThis.indexOf(a);
-      const orderB = sortLikeThis.indexOf(b);
-      return orderA - orderB;
-    });
-
-    setColumns(sortedColumns);
   };
 
   return (
@@ -273,8 +313,11 @@ const Board = () => {
             className="border py-2 px-1 rounded"
           >
             <option value="">Select Column</option>
-            <option value="in review">In Review</option>
-            <option value="accepted">Accepted</option>
+            {["in review", "testing"].map((column) => (
+              <option key={column} value={column}>
+                {column.charAt(0).toUpperCase() + column.slice(1)}
+              </option>
+            ))}
           </select>
           <button
             onClick={addColumn}
@@ -288,27 +331,28 @@ const Board = () => {
           >
             Invite Members
           </button>
-          <div className=" text-black px-3 py-2 rounded border">
+          <div className=" text-black px-3 py-2 rounded border capitalize">
             Members:{" "}
-            {members && members.map((member) => member.FirstName).join(", ")}
+            {members && members.map((member) => member.firstName).join(", ")}
           </div>
         </div>
       </div>
-      <div className="flex overflow-x-auto pb-12">
-        {columns.map((status) => (
+      <div className="flex overflow-x-auto pb-12 ">
+        {sortColumns(columns).map((status) => (
           <div
             key={status}
-            className="bg-[#FFDF92] shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg"
+            className="bg-[#FFDF92] shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg relative"
           >
             <h2 className="text-xl font-[550] mb-2 capitalize">{status}</h2>
             {status === "to do" && (
               <button
                 onClick={() => openAddTask(status)}
-                className="bg-[#FFDF92] text-black font-semibold py-2 rounded mb-2"
+                className="bg-[#FFDF92] text-black text-2xl font-semibold py-2 rounded mb-2 absolute top-3 right-6"
               >
-                + Add New Task
+                +
               </button>
             )}
+
             <div className="overflow-y-auto">{renderTasks(status)}</div>
           </div>
         ))}
@@ -321,6 +365,15 @@ const Board = () => {
           onSaveTask={handleSaveTask}
           currentTask={currentTask}
           column={currentStatus}
+          projectId={projectId}
+        />
+      )}
+
+      {openAddReminderModal && (
+        <AddReminder
+          setOpenAddReminderModal={setOpenAddReminderModal}
+          onSaveReminder={handleSaveReminder}
+          taskId={reminderTaskId}
         />
       )}
 
@@ -329,8 +382,8 @@ const Board = () => {
           task={selectedTask}
           setOpenTaskDetails={setOpenTaskDetails}
           onSaveComment={handleSaveComment}
-          onSaveSubtasks={handleSaveSubtasks}
           members={members}
+          requestHeaders={requestHeaders}
         />
       )}
 

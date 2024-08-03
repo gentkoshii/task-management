@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../assets/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Dashboard from "./User/Dashboard";
 import Projects from "./User/Projects";
 
@@ -10,10 +11,16 @@ const User = () => {
   const [profilePic, setProfilePic] = useState(
     "../../../public/user-avatar.png"
   );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   const requestHeaders = {
@@ -21,15 +28,15 @@ const User = () => {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
 
-  const getUserProfile = () => {
-    axios
-      .post(`http://localhost:5000/api/user/profile`, {
+  const getUserProfile = async () => {
+    await axios
+      .get(`https://4wvk44j3-7001.euw.devtunnels.ms/api/user/profile`, {
         headers: requestHeaders,
       })
       .then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
-        setName(response.data.FirstName + " " + response.data.LastName);
-        setProfilePic(response.data.ProfilePicture);
+        setName(response.data.firstName + " " + response.data.lastName);
+        setProfilePic(response.data.profilePicture);
       });
   };
 
@@ -44,9 +51,9 @@ const User = () => {
               src={profilePic}
               title="Profile Picture"
               alt="avatar"
-              className="h-8 w-8 rounded-full p-[3px] border-1 border-black"
+              className="h-8 w-8 rounded-full border-1 border-black"
             />
-            <p className="text-md">{name}</p>
+            <p className="text-xl">{name}</p>
           </div>
           <div className="flex flex-col py-24 gap-1">
             <Link
@@ -80,8 +87,8 @@ const User = () => {
 
         {/* Main Content */}
         <div className="ml-80 w-full mb-10 bg-transparent rounded-md border-1">
-          {activeLink === "dashboard" ? <Dashboard /> : null}
-          {activeLink === "projects" ? <Projects /> : null}
+          {activeLink === "dashboard" && <Dashboard />}
+          {activeLink === "projects" && <Projects />}
         </div>
       </div>
     </div>

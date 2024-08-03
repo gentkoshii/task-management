@@ -3,18 +3,17 @@ import { useTable, usePagination, useSortBy, useFilters } from 'react-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import CustomButton from '../../components/Button';
+import axios from 'axios';
 
 const Users = () => {
     const [data, setData] = useState([]);
     const [filterInput, setFilterInput] = useState('');
 
     useEffect(() => {
-        // Fetch data from the API
         const fetchData = async () => {
             try {
-                const response = await fetch('https://api.example.com/users');
-                const result = await response.json();
-                setData(result);
+                const response = await axios.get('http://your-backend-endpoint-url/users');
+                setData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -27,8 +26,6 @@ const Users = () => {
         { Header: 'Name', accessor: 'name' },
         { Header: 'Last Name', accessor: 'lastName' },
         { Header: 'Email', accessor: 'email' },
-        { Header: 'Progress', accessor: 'progress', Cell: ({ value }) => <progress max="100" value={value} className="w-full h-2 bg-green-200 rounded">{value}%</progress> },
-        { Header: 'Created', accessor: 'created' },
         { Header: 'Actions', Cell: ({ row }) => (
             <div className="flex justify-center">
                 <FontAwesomeIcon icon={faEye} className="text-blue-500 cursor-pointer mx-1" onClick={() => handleViewUser(row.original)} />
@@ -60,15 +57,24 @@ const Users = () => {
 
     const handleViewUser = (user) => {
         alert(`Viewing user: ${user.name} ${user.lastName}`);
+        // Implement view user functionality here, e.g., open a modal with user details
     };
 
     const handleEditUser = (user) => {
         alert(`Editing user: ${user.name} ${user.lastName}`);
+        // Implement edit user functionality here, e.g., open a form with user details
     };
 
-    const handleDeleteUser = (userId) => {
+    const handleDeleteUser = async (userId) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
-            alert(`Deleted user with ID: ${userId}`);
+            try {
+                await axios.delete(`http://your-backend-endpoint-url/users/${userId}`);
+                setData(data.filter(user => user.id !== userId));
+                alert('User deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Failed to delete user');
+            }
         }
     };
 
@@ -119,7 +125,7 @@ const Users = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="pagination flex justify-between p-4">
+            <div className="pagination flex justify-between items-center mt-4">
                 <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50">
                     {'<'}
                 </button>
@@ -130,7 +136,7 @@ const Users = () => {
                     {'>'}
                 </button>
             </div>
-            <div className="absolute top-4 right-4">
+            <div className="mt-6 sm:mt-0 sm:absolute sm:bottom-4 sm:right-4">
                 <CustomButton to="/" color="blue" bgColor="blue" btnText="Go to homepage" />
             </div>
         </div>

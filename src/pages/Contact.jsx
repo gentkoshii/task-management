@@ -21,14 +21,29 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phonePattern = /^\+?[0-9]{10,15}$/;
+
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.message) {
       setPopupMessage('All fields are required.');
       setShowPopup(true);
       return;
     }
 
+    if (!emailPattern.test(formData.email)) {
+      setPopupMessage('Please enter a valid email address.');
+      setShowPopup(true);
+      return;
+    }
+
+    if (!phonePattern.test(formData.phone)) {
+      setPopupMessage('Please enter a valid phone number.');
+      setShowPopup(true);
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:3001/contacts', formData);
+      const response = await axios.post('http://your-backend-endpoint-url/contacts', formData);
       if (response.status === 201) {
         setPopupMessage('Contact information submitted successfully!');
         setFormData({
@@ -58,7 +73,7 @@ const Contact = () => {
       </div>
       <div className="max-w-2xl mx-auto text-black rounded-lg border border-black">
         <form onSubmit={handleSubmit} className="space-y-4 p-6">
-          <div className="flex justify-between gap-4">
+          <div className="flex flex-col lg:flex-row justify-between gap-4">
             <input
               type="text"
               name="firstName"
@@ -76,7 +91,7 @@ const Contact = () => {
               className="w-full p-2 border border-black rounded-lg bg-custom-yellow placeholder-black"
             />
           </div>
-          <div className="flex justify-between gap-4">
+          <div className="flex flex-col lg:flex-row justify-between gap-4">
             <input
               type="email"
               name="email"
