@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../assets/Navbar";
+// import Navbar from "../assets/Navbar";
 import { Link } from "react-router-dom";
 import Dashboard from "./User/Dashboard";
 import Projects from "./User/Projects";
@@ -35,7 +35,7 @@ const User = () => {
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex flex-1 min-h-[800px] w-[90%] justify-center ml-[5%] gap-14 relative">
         {/* Sidebar */}
         <div className="fixed top-30 left-10 w-80 bg-[#FFDF92] border-1 border-[#FFE5A8] py-5 pl-8 h-[800px] rounded-lg flex flex-col justify-between gap-6">

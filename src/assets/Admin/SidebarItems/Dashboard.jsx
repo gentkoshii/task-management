@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faProjectDiagram, faComments, faBell, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import CustomButton from '../../../components/Button';
+import axios from 'axios';
 
 const Dashboard = () => {
     const [clients, setClients] = useState(0);
@@ -13,24 +14,23 @@ const Dashboard = () => {
     });
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const clientsResponse = await axios.get('http://your-backend-endpoint-url/clients/count');
+                const projectsResponse = await axios.get('http://your-backend-endpoint-url/projects/count');
+                const recentActivityResponse = await axios.get('http://your-backend-endpoint-url/recent-activity');
+                const userStatisticsResponse = await axios.get('http://your-backend-endpoint-url/user-statistics');
 
-        const mockClients = 512;
-        const mockProjectsRegistered = 45;
-        const mockRecentActivity = [
-            { type: 'notification', description: 'New user registered', timestamp: '2024-07-24T10:11:22Z' },
-            { type: 'message', description: 'New message', timestamp: '2024-07-24T09:30:22Z' },
-        ];
-        const mockUserStatistics = {
-            activeUsers: 120,
-            newSignups: 30,
+                setClients(clientsResponse.data.count);
+                setProjectsRegistered(projectsResponse.data.count);
+                setRecentActivity(recentActivityResponse.data);
+                setUserStatistics(userStatisticsResponse.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
-        setTimeout(() => {
-            setClients(mockClients);
-            setProjectsRegistered(mockProjectsRegistered);
-            setRecentActivity(mockRecentActivity);
-            setUserStatistics(mockUserStatistics);
-        }, 1000); // Simulate network delay
+        fetchData();
     }, []);
 
     return (
@@ -82,11 +82,11 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="absolute top-4 right-4">
+            <div className="fixed bottom-4 right-4">
                 <CustomButton to="/" color="blue" bgColor="blue" btnText="Go to homepage" />
             </div>
+            </div>
+
         </div>
     );
 };

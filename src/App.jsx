@@ -5,7 +5,8 @@ import Footer from './assets/Footer.jsx';
 
   const App = () => {
     const location = useLocation();
-    const showNavAndFooter = !location.pathname.startsWith('/admin');  
+    const showNavAndFooter = !location.pathname.startsWith('/admin')  && !location.pathname.startsWith('/user');
+ 
 
   return (
     <div className='overflow-hidden'>

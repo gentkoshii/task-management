@@ -20,10 +20,10 @@ const Sidebar = ({ isOpen, toggleDrawer, toggleLogout }) => {
 
     return (
         <div className={`bg-white shadow-lg h-full fixed z-30 w-64 transform transition-transform duration-300 ease-in-out
-                        ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                        ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
             <div className="text-center py-4">
                 <img src="/1.png" alt="Logo" className="mx-auto h-12 w-auto rounded-md"/>
-                <h1 className="text-lg font-semibold">Task Manager</h1>
+                <h1 className="text-lg">TaskFlow</h1>
             </div>
             <ul className="pt-4 space-y-7">
                 {menuItems.map(item => (
