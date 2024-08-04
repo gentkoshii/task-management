@@ -53,29 +53,44 @@ const Search = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const gradientStyle = {
+    background: "radial-gradient(circle at right , #FE9C5E, #FFEEDB 79%)",
+    backgroundSize: "fit",
+  };
+
   return (
-    <div className="flex flex-col gap-10 m-10 h-full">
-      <h1>Search Results for "{searchQuery}"</h1>
-      <div className="flex flex-wrap gap-4">
-        {searchData.map((project) => (
-          <div
-            key={project.id}
-            onClick={() => handleClick(project.id)}
-            className="bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)] min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer hover:-translate-y-1"
-          >
-            <div className="text-xl text-black font-semibold">
-              {project.name}
+    <div style={gradientStyle}>
+      <div className="flex flex-col w-[70%] ml-[15%] min-h-[502px] gap-10 p-10">
+        <h2 className="text-2xl font-semibold">
+          Search Results for "{searchQuery}"
+        </h2>
+        <div className="w-full grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-6">
+          {searchData.map((project) => (
+            <div
+              key={project.id}
+              onClick={() => handleClick(project.id)}
+              className="h-[300px] bg-gray-50 p-6 border rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-transform transform hover:-translate-y-1"
+            >
+              <div className="text-xl text-black font-semibold mb-2">
+                {project.name}
+              </div>
+              <div className="text-sm text-gray-600 mb-4 line-clamp-3">
+                {project.description || "No description available."}
+              </div>
+              <div className="mt-auto">
+                <p className="text-sm text-gray-600">
+                  Created: {new Date(project.createdAt).toLocaleDateString()}
+                </p>
+                {project.updatedAt && (
+                  <p className="text-sm text-gray-600">
+                    Last Updated:{" "}
+                    {new Date(project.updatedAt).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
             </div>
-            <p className="text-sm text-gray-600 mt-2">
-              Created: {new Date(project.createdAt).toLocaleDateString()}
-            </p>
-            {project.updatedAt && (
-              <p className="text-sm text-gray-600">
-                Last Updated: {new Date(project.updatedAt).toLocaleDateString()}
-              </p>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

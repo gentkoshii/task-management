@@ -11,10 +11,17 @@ const User = () => {
   const [profilePic, setProfilePic] = useState(
     "../../../public/user-avatar.png"
   );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     getUserProfile();
+    const handleScroll = () => {
+      setShowScrollTopButton(window.scrollY > window.innerHeight * 1.1);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleLogout = () => {
@@ -40,12 +47,26 @@ const User = () => {
       });
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       <Navbar />
       <div className="flex flex-1 min-h-[800px] w-[90%] justify-center ml-[5%] gap-14 relative">
         {/* Sidebar */}
-        <div className="fixed top-30 left-10 w-80 bg-[#FFDF92] border-1 border-[#FFE5A8] py-5 pl-8 h-[800px] rounded-lg flex flex-col justify-between gap-6">
+        <button
+          className="fixed top-[82px] left-[36px] md:hidden bg-[#FFDF92] p-2 rounded-md"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <img src="hide.png" alt="Menu" className="h-6 w-6" />
+        </button>
+        <div
+          className={`fixed top-30 mt-4 left-8 w-80 bg-[#FFDF92] border-1 py-5 pl-8 h-[780px] rounded-lg flex flex-col justify-between gap-6  ${
+            isSidebarOpen ? "flex" : "hidden "
+          } md:flex`}
+        >
           <div className="flex items-center gap-6">
             <img
               src={profilePic}
@@ -86,11 +107,19 @@ const User = () => {
         </div>
 
         {/* Main Content */}
-        <div className="ml-80 w-full mb-10 bg-transparent rounded-md border-1">
+        <div className="ml-0 md:ml-80 w-full mt-6 mb-10 bg-transparent rounded-md border-1">
           {activeLink === "dashboard" && <Dashboard />}
           {activeLink === "projects" && <Projects />}
         </div>
       </div>
+      {showScrollTopButton && (
+        <button
+          className="fixed bottom-10 right-10 bg-[#FFDF92] p-3 rounded-full shadow-lg"
+          onClick={scrollToTop}
+        >
+          <img src="up.png" alt="Scroll to top" className="h-6 w-6" />
+        </button>
+      )}
     </div>
   );
 };

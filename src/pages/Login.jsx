@@ -51,6 +51,7 @@ function Login() {
 
   return (
     <div className="h-screen flex flex-col justify-between">
+      <Navbar />
       <div className={`${display} h-full`}>
         <div className={`${display} w-[90%] max-w-[400px] h-[500px] rounded-4`}>
           <form

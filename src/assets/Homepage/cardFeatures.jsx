@@ -68,7 +68,6 @@ const CardFeatures = () => {
 
   const button =
     "w-44 h-10 p-[4px] border-[1px] border-black rounded-5 text-xl text-black text-center no-underline";
-
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-1 md:gap-5 items-center place-items-center justify-center">

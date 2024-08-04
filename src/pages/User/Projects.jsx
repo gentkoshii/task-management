@@ -90,15 +90,18 @@ const Projects = () => {
           />
         )}
       </div>
-      <div className="flex flex-wrap gap-4">
+      <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-1 gap-5">
         {projects.map((project) => (
           <div
             key={project.id}
             onClick={() => handleClick(project.id)}
-            className=" bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)]  min-h-[200px] min-w-[300px] p-4 rounded-lg shadow-md w-64 cursor-pointer hover:-translate-y-1"
+            className=" bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)]  h-[300px] p-4 rounded-lg shadow-md cursor-pointer hover:-translate-y-1"
           >
             <div className="text-xl text-black font-semibold">
               {project.name}
+            </div>
+            <div className="text-sm text-gray-600 my-3 ">
+              {project.description}
             </div>
             <p className="text-sm text-gray-600 mt-2">
               Created: {new Date(project.createdAt).toLocaleDateString()}
