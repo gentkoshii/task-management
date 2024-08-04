@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useJwt } from "react-jwt";
 
 const TaskDetails = ({
   task,
@@ -19,6 +20,11 @@ const TaskDetails = ({
   const [assignedMembers, setAssignedMembers] = useState(
     task?.assignedMembers || []
   );
+  const [attachments, setAttachments] = useState([]);
+
+  const token = localStorage.getItem("token");
+  const { decodedToken } = useJwt(token);
+  const userId = decodedToken?.sub;
 
   const profilePic =
     JSON.parse(localStorage.getItem("user"))?.profilePicture ||
@@ -28,7 +34,7 @@ const TaskDetails = ({
 
   const requestHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${token}`,
   };
 
   useEffect(() => {
@@ -36,6 +42,7 @@ const TaskDetails = ({
       fetchSubtasks();
       fetchComments();
       setAssignedMembers(task.assignedMembers || []);
+      fetchAttachments();
     }
   }, [task]);
 
@@ -140,13 +147,14 @@ const TaskDetails = ({
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         console.log("File upload response:", response);
         alert("File uploaded successfully.");
         setFile(null);
+        fetchAttachments(); // Fetch attachments after uploading a new one
       } catch (error) {
         console.error(
           "Failed to upload file:",
@@ -181,6 +189,7 @@ const TaskDetails = ({
           {
             taskId: task.id,
             content: newComment,
+            userId: userId, // Include the userId in the request
           },
           {
             headers: requestHeaders,
@@ -207,6 +216,61 @@ const TaskDetails = ({
       fetchComments(); // Refetch comments after removing one
     } catch (error) {
       console.error("Failed to remove comment:", error);
+    }
+  };
+
+  const fetchAttachments = async () => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/attachment/task/${task.id}`,
+        {
+          headers: requestHeaders,
+        }
+      );
+      setAttachments(response.data);
+    } catch (error) {
+      console.error("Failed to fetch attachments:", error);
+    }
+  };
+
+  const handleDownloadAttachment = async (attachmentId) => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/attachment/download`,
+        {
+          params: {
+            attachmentId,
+          },
+          headers: requestHeaders,
+          responseType: "blob", // Important to handle binary data
+        }
+      );
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "attachment"); // Use the correct file name here
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Failed to download attachment:", error);
+    }
+  };
+
+  const handleRemoveAttachment = async (attachmentId) => {
+    try {
+      await axios.delete(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/attachment/delete`,
+        {
+          params: {
+            attachmentId,
+          },
+          headers: requestHeaders,
+        }
+      );
+      fetchAttachments(); // Refetch attachments after removing one
+    } catch (error) {
+      console.error("Failed to remove attachment:", error);
     }
   };
 
@@ -421,6 +485,38 @@ const TaskDetails = ({
               >
                 Upload File
               </button>
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <h4 className="text-base font-semibold">Attachments</h4>
+            <div>
+              {attachments.length > 0 ? (
+                attachments.map((attachment) => (
+                  <div
+                    key={attachment.id}
+                    className="flex items-center justify-between bg-gray-100 p-2 rounded my-1"
+                  >
+                    <span>{attachment.fileName}</span>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => handleDownloadAttachment(attachment.id)}
+                        className="text-sm hover:-translate-y-[2px] active:underline"
+                      >
+                        Download
+                      </button>
+                      <button
+                        onClick={() => handleRemoveAttachment(attachment.id)}
+                        className="text-red-500 text-sm"
+                      >
+                        <img src="/file.png" alt="delete" className="w-5" />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No attachments yet.</p>
+              )}
             </div>
           </div>
         </div>
