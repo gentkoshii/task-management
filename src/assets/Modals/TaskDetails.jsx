@@ -255,13 +255,32 @@ const TaskDetails = ({
             attachmentId,
           },
           headers: requestHeaders,
-          responseType: "blob", // Important to handle binary data
+          responseType: "blob", // Ensure the response is in blob format
         }
       );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Create a URL for the binary data
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: response.headers["content-type"] })
+      );
+
+      // Extract the filename from the content-disposition header, if available
+      let filename = "attachment";
+      const contentDisposition = response.headers["content-disposition"];
+      if (
+        contentDisposition &&
+        contentDisposition.indexOf("attachment") !== -1
+      ) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (filenameMatch.length === 2) {
+          filename = filenameMatch[1];
+        }
+      }
+
+      // Create a link element to trigger the download
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "attachment"); // Use the correct file name here
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
