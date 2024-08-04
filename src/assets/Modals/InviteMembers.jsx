@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const InviteMembers = ({ setOpenInviteMembers }) => {
+const InviteMembers = ({ setOpenInviteMembers, projectId }) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,14 +17,13 @@ const InviteMembers = ({ setOpenInviteMembers }) => {
       return;
     }
 
-    const invitation = { email };
+    const invitation = { projectId, email };
 
     setIsLoading(true);
 
     try {
       await axios.post(
-        "https://4wvk44j3-7001.euw.devtunnels.ms/api/invite",
-        invitation
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/invitation/to-project?projectId=${projectId}&email=${email}`
       );
       alert("Invitation sent successfully!");
       setOpenInviteMembers(false);
@@ -67,6 +66,7 @@ const InviteMembers = ({ setOpenInviteMembers }) => {
           >
             {isLoading ? "Sending..." : "Send Invitation"}
           </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
       </div>
     </div>
