@@ -34,12 +34,16 @@ const AddEditTask = ({
     }
 
     let statusBoard;
-    if (column === "to do") {
+    if (column === "To Do") {
       statusBoard = 0;
-    } else if (column === "in progress") {
+    } else if (column === "In Progress") {
       statusBoard = 1;
-    } else {
+    } else if (column === "in review") {
       statusBoard = 2;
+    } else if (column === "testing") {
+      statusBoard = 3;
+    } else if (column === "Done") {
+      statusBoard = 4;
     }
 
     const task = {

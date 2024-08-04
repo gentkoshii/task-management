@@ -104,6 +104,7 @@ const Board = () => {
   };
 
   const handleSaveTask = async (task) => {
+    console.log(task);
     const newTask = { ...task };
     try {
       if (taskType === "add") {
@@ -174,9 +175,16 @@ const Board = () => {
     const statusMapping = {
       "To Do": 0,
       "In Progress": 1,
-      "in review": 4,
+      "in review": 2,
       testing: 3,
-      Done: 2,
+      Done: 4,
+    };
+
+    const taskPriorityToImage = {
+      0: "/problem-green.png",
+      1: "/problem-yellow.png",
+      2: "/problem-orange.png",
+      3: "/problem-red.png",
     };
 
     const statusValue = statusMapping[status];
@@ -204,6 +212,15 @@ const Board = () => {
                 </span>
               ))}
           </div>
+          {console.log(task)}
+          <div className="flex justify-end absolute bottom-3 right-1">
+            <img
+              src={taskPriorityToImage[task.priority]}
+              alt="priority-icon"
+              className="w-5"
+            />
+          </div>
+
           <div className="flex justify-end absolute top-3 right-1">
             <button
               onClick={(e) => {
