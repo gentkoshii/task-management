@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Dashboard from "./User/Dashboard";
 import Projects from "./User/Projects";
+import { useTheme } from "../context/ThemeContext";
 
 const User = () => {
   const [activeLink, setActiveLink] = useState("dashboard");
@@ -14,6 +15,7 @@ const User = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const navigate = useNavigate();
+  const { darkMode, setDarkMode } = useTheme();
 
   useEffect(() => {
     getUserProfile();
@@ -52,18 +54,21 @@ const User = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden">
-      <Navbar />
-      <div className="flex flex-1 min-h-[800px] w-[90%] justify-center ml-[5%] gap-14 relative">
+    <div
+      className={`flex flex-col py-8 px-6 ${
+        darkMode ? "bg-slate-900" : "bg-white"
+      }`}
+    >
+      <div className="flex w-full flex-col md:flex-row justify-center gap-2 md:gap-14">
         {/* Sidebar */}
         <button
-          className="fixed top-[82px] left-[36px] md:hidden bg-[#FFDF92] p-2 rounded-md"
+          className="absolute top-[4.5vh] left-[36px] md:hidden bg-[#FFDF92]  p-2 rounded-md"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <img src="hide.png" alt="Menu" className="h-6 w-6" />
         </button>
         <div
-          className={`fixed top-30 mt-4 left-8 w-80 bg-[#FFDF92] border-1 py-5 pl-8 h-[780px] rounded-lg flex flex-col justify-between gap-6  ${
+          className={`flex md:w-18 lg:w-[25vw] w-full bg-[#FFDF92] border-1 py-5 px-8 h-full rounded-lg flex-col justify-between gap-6  ${
             isSidebarOpen ? "flex" : "hidden "
           } md:flex`}
         >
@@ -79,7 +84,9 @@ const User = () => {
           <div className="flex flex-col py-24 gap-1">
             <Link
               className={`text-md font-semibold text-black no-underline hover:translate-x-[2px] pl-6 ${
-                activeLink === "dashboard" ? "bg-[#fff2d3] w-48 rounded-md" : ""
+                activeLink === "dashboard"
+                  ? "bg-[#fff2d3] w-full rounded-md"
+                  : ""
               }`}
               onClick={() => setActiveLink("dashboard")}
             >
@@ -87,7 +94,9 @@ const User = () => {
             </Link>
             <Link
               className={`text-md font-semibold text-black no-underline hover:translate-x-[2px] pl-6 ${
-                activeLink === "projects" ? "bg-[#fff2d3] w-48 rounded-md" : ""
+                activeLink === "projects"
+                  ? "bg-[#fff2d3] w-full rounded-md"
+                  : ""
               }`}
               onClick={() => setActiveLink("projects")}
             >
@@ -107,7 +116,11 @@ const User = () => {
         </div>
 
         {/* Main Content */}
-        <div className="ml-0 md:ml-80 w-full mt-6 mb-10 bg-transparent rounded-md border-1">
+        <div
+          className={`w-full flex rounded-md border-1 ${
+            darkMode ? "bg-slate-900" : "bg-white"
+          }`}
+        >
           {activeLink === "dashboard" && <Dashboard />}
           {activeLink === "projects" && <Projects />}
         </div>

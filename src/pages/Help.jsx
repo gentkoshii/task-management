@@ -1,24 +1,36 @@
 import React from "react";
-
-const gradientStyle = {
-  background:
-    "radial-gradient(circle at bottom left, rgba(255, 223, 146, 0.75), #FFF4DB 30%)",
-  backgroundSize: "cover",
-};
+import { useTheme } from "../context/ThemeContext";
 
 const Help = () => {
+  const { darkMode } = useTheme();
+
+  const gradientStyle = darkMode
+    ? {
+        background:
+          "radial-gradient(circle at bottom left, rgba(45, 55, 72, 0.75), #1A202C 30%)",
+        backgroundSize: "cover",
+      }
+    : {
+        background:
+          "radial-gradient(circle at bottom left, rgba(255, 223, 146, 0.75), #FFF4DB 30%)",
+        backgroundSize: "cover",
+      };
+
+  const textClass = darkMode ? "text-gray-300" : "text-gray-700";
+  const headingClass = darkMode ? "text-white" : "text-black";
+
   return (
     <div className="flex flex-col items-center overflow-hidden">
       <div className="w-full flex justify-center" style={gradientStyle}>
         <div className="w-[90%] lg:w-[70%] flex flex-col justify-center text-left p-8 lg:p-24 gap-12 lg:gap-24">
           <div className="flex flex-col text-lg lg:text-xl gap-3">
-            <h2 className="text-2xl lg:text-3xl">Need Help? We're Here for You</h2>
-            <p>Below, you'll find various ways to get the support you need.</p>
+            <h2 className={`text-2xl lg:text-3xl ${headingClass}`}>Need Help? We're Here for You</h2>
+            <p className={textClass}>Below, you'll find various ways to get the support you need.</p>
           </div>
 
           <div className="flex flex-col text-lg lg:text-xl gap-3">
-            <h2 className="text-2xl lg:text-3xl">Comprehensive Knowledge Base</h2>
-            <p>
+            <h2 className={`text-2xl lg:text-3xl ${headingClass}`}>Comprehensive Knowledge Base</h2>
+            <p className={textClass}>
               Our Knowledge Base is your first stop for all things TaskFlow.
               Packed with detailed guides, video tutorials, and FAQs, it's
               designed to help you find answers quickly and easily. Whether
@@ -29,8 +41,8 @@ const Help = () => {
           </div>
 
           <div className="flex flex-col text-lg lg:text-xl gap-3">
-            <h2 className="text-2xl lg:text-3xl">Contact Our Support Team</h2>
-            <p>
+            <h2 className={`text-2xl lg:text-3xl ${headingClass}`}>Contact Our Support Team</h2>
+            <p className={textClass}>
               If you need personalized assistance, our Support Team is just a
               click away. You can reach out to us via email or live chat for
               quick and efficient help with any issues you might encounter. Our
@@ -41,8 +53,8 @@ const Help = () => {
           </div>
 
           <div className="flex flex-col text-lg lg:text-xl gap-3">
-            <h2 className="text-2xl lg:text-3xl">Feedback and Suggestions</h2>
-            <p>
+            <h2 className={`text-2xl lg:text-3xl ${headingClass}`}>Feedback and Suggestions</h2>
+            <p className={textClass}>
               Your feedback is invaluable to us. If you have suggestions on how
               we can improve TaskFlow or ideas for new features, we’d love to
               hear from you. Submit your feedback through our platform or reach

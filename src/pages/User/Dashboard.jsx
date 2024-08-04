@@ -93,8 +93,8 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="p-4 m-5">
-      <h1 className="text-2xl font-semibold">Welcome to TaskFlow</h1>
+    <div className="p-4 m-5 dark:text-white">
+      <h1 className="text-2xl font-semibold ">Welcome to TaskFlow</h1>
       <div className="mt-4">
         <p>Total Projects you are working on: {totalProjectsCount}</p>
         <p>Total Tasks you are working on: {totalTasks}</p>

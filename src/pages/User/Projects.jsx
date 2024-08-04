@@ -71,7 +71,7 @@ const Projects = () => {
   };
 
   return (
-    <div className="flex flex-col gap-10 m-10 h-full">
+    <div className="flex flex-col gap-10 p-10 dark:bg-slate-800">
       <div>
         <button
           onClick={() => setIsAddProjectOpen(true)}

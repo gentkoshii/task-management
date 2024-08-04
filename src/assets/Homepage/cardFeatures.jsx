@@ -59,7 +59,7 @@ const CardFeatures = () => {
       icon: testTubeImg,
       title: "Resource Hub",
       description:
-        "This is a brief description... This is a brief description... This is a brief description...",
+        "Save time with a well-designed hub that helps teams find information easily and quickly.",
       link: "/features/fourth-card",
       color: "bg-[#FF87AA]",
       btnColor: "bg-[#EE638C]",
@@ -86,9 +86,9 @@ const CardFeatures = () => {
               )}
             </div>
             <div className="flex flex-col items-center">
-              <div className="flex-1 mt-4">
+              <div className="flex-1 mt-4 dark:text-slate-900">
                 <h3 className="text-xl font-bold">{cardFeature.title}</h3>
-                <p className="mt-2">{cardFeature.description}</p>
+                <p className="mt-2 ">{cardFeature.description}</p>
               </div>
               <div className="mt-4">
                 <Link to={"/features"}>
