@@ -55,6 +55,7 @@ const TaskDetails = ({
         }
       );
       setAssignedMembers(response.data || []);
+      console.log("Assigned members:", response.data);
     } catch (error) {
       console.error("Failed to fetch members:", error);
     }
@@ -115,7 +116,7 @@ const TaskDetails = ({
 
   const handleSubtaskCompletion = async (index) => {
     const updatedSubtasks = subtasks.map((subtask, i) =>
-      i === index ? { ...subtask, completed: !subtask.completed } : subtask
+      i === index ? { ...subtask, isCompleted: !subtask.isCompleted } : subtask
     );
 
     setSubtasks(updatedSubtasks);
@@ -125,7 +126,7 @@ const TaskDetails = ({
         `https://4wvk44j3-7001.euw.devtunnels.ms/api/subtask/update-completion`,
         {
           subtaskId: subtasks[index].id,
-          isCompleted: updatedSubtasks[index].completed,
+          isCompleted: !subtasks[index].isCompleted,
         },
         {
           headers: requestHeaders,
@@ -324,7 +325,7 @@ const TaskDetails = ({
           headers: requestHeaders,
           data: {
             taskId: task.id,
-            userId: member.id,
+            userId: member.userId,
           },
         }
       );
@@ -613,6 +614,11 @@ const TaskDetails = ({
                   key={index}
                   className="flex items-center gap-2 bg-gray-100 px-2 py-1 rounded capitalize"
                 >
+                  <img
+                    src={member.profilePicture || profilePic}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
                   <span>
                     {member.firstName} {member.lastName}
                   </span>
