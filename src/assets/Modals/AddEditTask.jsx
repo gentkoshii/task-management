@@ -13,6 +13,7 @@ const AddEditTask = ({
   const [tags, setTags] = useState("");
   const [priority, setPriority] = useState("");
   const [dueDate, setDueDate] = useState(currentTask?.dueDate || "");
+  const [statusValueTop, setStatusValueTop] = useState("");
 
   useEffect(() => {
     if (type === "edit" && currentTask) {
@@ -20,6 +21,7 @@ const AddEditTask = ({
       setDescription(currentTask.description);
       setTags(currentTask.tags ? currentTask.tags.join(", ") : "");
       setPriority(currentTask.priority);
+      setStatusValueTop(currentTask.status);
 
       let dateFormatted = new Date(currentTask.dueDate);
       dateFormatted = dateFormatted.toISOString().split("T")[0];
@@ -33,22 +35,13 @@ const AddEditTask = ({
       return;
     }
 
-    let statusBoard;
-    if (column === "to do") {
-      statusBoard = 0;
-    } else if (column === "in progress") {
-      statusBoard = 1;
-    } else {
-      statusBoard = 2;
-    }
-
     const task = {
       title,
       description,
       tags: tags.length > 0 ? tags.split(",").map((tag) => tag.trim()) : [],
       priority: Number(priority),
       dueDate,
-      status: statusBoard,
+      status: Number(statusValueTop),
       projectId,
     };
     onSaveTask(task);
@@ -112,6 +105,30 @@ const AddEditTask = ({
             className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
           />
         </div>
+
+        {type === "edit" && (
+          <div className="mt-3 flex flex-col space-y-1">
+            <label htmlFor="status" className="text-sm">
+              Status
+            </label>
+            <select
+              id="Status"
+              value={statusValueTop}
+              onChange={(e) => setStatusValueTop(e.target.value)}
+              className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
+            >
+              <option value="" aria-readonly>
+                Select Status
+              </option>
+              <option value="0">To Do</option>
+              <option value="1">In Progress</option>
+              <option value="2">In Review</option>
+              <option value="3">Testing</option>
+              <option value="4">Done</option>
+            </select>
+          </div>
+        )}
+
         <div className="mt-3 flex flex-col space-y-1">
           <label htmlFor="priority" className="text-sm">
             Priority

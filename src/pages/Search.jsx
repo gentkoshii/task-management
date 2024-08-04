@@ -50,8 +50,8 @@ const Search = () => {
     navigate(`/projects/${projectId}`);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div className="min-h-[582px]">Loading...</div>;
+  if (error) return <div className="min-h-[582px]">Error: {error}</div>;
 
   const gradientStyle = {
     background: "radial-gradient(circle at right , #FE9C5E, #FFEEDB 79%)",

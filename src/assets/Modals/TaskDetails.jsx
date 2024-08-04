@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useJwt } from "react-jwt";
 
 const TaskDetails = ({
   task,
@@ -19,6 +20,11 @@ const TaskDetails = ({
   const [assignedMembers, setAssignedMembers] = useState(
     task?.assignedMembers || []
   );
+  const [attachments, setAttachments] = useState([]);
+
+  const token = localStorage.getItem("token");
+  const { decodedToken } = useJwt(token);
+  const userId = decodedToken?.sub;
 
   const profilePic =
     JSON.parse(localStorage.getItem("user"))?.profilePicture ||
@@ -28,16 +34,32 @@ const TaskDetails = ({
 
   const requestHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${token}`,
   };
 
   useEffect(() => {
     if (task) {
       fetchSubtasks();
       fetchComments();
-      setAssignedMembers(task.assignedMembers || []);
+      fetchAssignedMembers(task.id);
+      fetchAttachments();
     }
   }, [task]);
+
+  const fetchAssignedMembers = async (taskId) => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${taskId}/assigned-users`,
+        {
+          headers: requestHeaders,
+        }
+      );
+      setAssignedMembers(response.data || []);
+      console.log("Assigned members:", response.data);
+    } catch (error) {
+      console.error("Failed to fetch members:", error);
+    }
+  };
 
   const fetchSubtasks = async () => {
     try {
@@ -51,7 +73,6 @@ const TaskDetails = ({
         }
       );
       setSubtasks(response.data);
-      onSaveSubtasks(response.data); // Update the parent component if necessary
     } catch (error) {
       console.error("Failed to fetch subtasks:", error);
     }
@@ -95,18 +116,17 @@ const TaskDetails = ({
 
   const handleSubtaskCompletion = async (index) => {
     const updatedSubtasks = subtasks.map((subtask, i) =>
-      i === index ? { ...subtask, completed: !subtask.completed } : subtask
+      i === index ? { ...subtask, isCompleted: !subtask.isCompleted } : subtask
     );
 
     setSubtasks(updatedSubtasks);
-    onSaveSubtasks(updatedSubtasks);
 
     try {
       await axios.patch(
         `https://4wvk44j3-7001.euw.devtunnels.ms/api/subtask/update-completion`,
         {
           subtaskId: subtasks[index].id,
-          isCompleted: updatedSubtasks[index].completed,
+          isCompleted: !subtasks[index].isCompleted,
         },
         {
           headers: requestHeaders,
@@ -140,13 +160,14 @@ const TaskDetails = ({
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         console.log("File upload response:", response);
         alert("File uploaded successfully.");
         setFile(null);
+        fetchAttachments(); // Fetch attachments after uploading a new one
       } catch (error) {
         console.error(
           "Failed to upload file:",
@@ -181,6 +202,7 @@ const TaskDetails = ({
           {
             taskId: task.id,
             content: newComment,
+            userId: userId, // Include the userId in the request
           },
           {
             headers: requestHeaders,
@@ -210,14 +232,85 @@ const TaskDetails = ({
     }
   };
 
+  const fetchAttachments = async () => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/attachment/task/${task.id}`,
+        {
+          headers: requestHeaders,
+        }
+      );
+      setAttachments(response.data);
+    } catch (error) {
+      console.error("Failed to fetch attachments:", error);
+    }
+  };
+
+  const handleDownloadAttachment = async (attachmentId) => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/attachment/download`,
+        {
+          params: {
+            attachmentId,
+          },
+          headers: requestHeaders,
+          responseType: "blob", // Ensure the response is in blob format
+        }
+      );
+
+      // Create a URL for the binary data
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: response.headers["content-type"] })
+      );
+
+      // Extract the filename from the content-disposition header, if available
+      let filename = "attachment";
+      const contentDisposition = response.headers["content-disposition"];
+      if (
+        contentDisposition &&
+        contentDisposition.indexOf("attachment") !== -1
+      ) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (filenameMatch.length === 2) {
+          filename = filenameMatch[1];
+        }
+      }
+
+      // Create a link element to trigger the download
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Failed to download attachment:", error);
+    }
+  };
+
+  const handleRemoveAttachment = async (attachmentId) => {
+    try {
+      await axios.delete(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/attachment/delete`,
+        {
+          params: {
+            attachmentId,
+          },
+          headers: requestHeaders,
+        }
+      );
+      fetchAttachments(); // Refetch attachments after removing one
+    } catch (error) {
+      console.error("Failed to remove attachment:", error);
+    }
+  };
+
   const assignMember = async (e) => {
     const memberId = e.target.value;
-    const member = members.find((m) => m.id === memberId);
+    const member = members.find((m) => m.userId === memberId);
 
     if (member) {
-      console.log("Assigning member:", member); // Log the member being assigned
-      console.log("Task ID:", task.id, "User ID:", memberId); // Log the task and user IDs
-
       try {
         const response = await axios.post(
           "https://4wvk44j3-7001.euw.devtunnels.ms/api/task/assign-user",
@@ -251,7 +344,7 @@ const TaskDetails = ({
           headers: requestHeaders,
           data: {
             taskId: task.id,
-            userId: member.id,
+            userId: member.userId,
           },
         }
       );
@@ -355,12 +448,12 @@ const TaskDetails = ({
                   <li
                     key={index}
                     className={`flex items-center text-sm ${
-                      subtask.completed ? "line-through text-gray-500" : ""
+                      subtask.isCompleted ? "line-through text-gray-500" : ""
                     }`}
                   >
                     <input
                       type="checkbox"
-                      checked={subtask.completed || false}
+                      checked={subtask.isCompleted || false}
                       onChange={() => handleSubtaskCompletion(index)}
                       className="mr-2"
                     />
@@ -421,6 +514,38 @@ const TaskDetails = ({
               >
                 Upload File
               </button>
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <h4 className="text-base font-semibold">Attachments</h4>
+            <div>
+              {attachments.length > 0 ? (
+                attachments.map((attachment) => (
+                  <div
+                    key={attachment.id}
+                    className="flex items-center justify-between bg-gray-100 p-2 rounded my-1"
+                  >
+                    <span>{attachment.fileName}</span>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => handleDownloadAttachment(attachment.id)}
+                        className="text-sm hover:-translate-y-[2px] active:underline"
+                      >
+                        Download
+                      </button>
+                      <button
+                        onClick={() => handleRemoveAttachment(attachment.id)}
+                        className="text-red-500 text-sm"
+                      >
+                        <img src="/file.png" alt="delete" className="w-5" />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No attachments yet.</p>
+              )}
             </div>
           </div>
         </div>
@@ -495,7 +620,7 @@ const TaskDetails = ({
             >
               <option value="">Assign Member</option>
               {members.map((member) => (
-                <option key={member.id} value={member.id}>
+                <option key={member.userId} value={member.userId}>
                   {member.firstName} {member.lastName}
                 </option>
               ))}
@@ -508,6 +633,11 @@ const TaskDetails = ({
                   key={index}
                   className="flex items-center gap-2 bg-gray-100 px-2 py-1 rounded capitalize"
                 >
+                  <img
+                    src={member.profilePicture || profilePic}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
                   <span>
                     {member.firstName} {member.lastName}
                   </span>

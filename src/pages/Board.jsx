@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import AddEditTask from "../assets/Modals/AddEditTask";
 import TaskDetails from "../assets/Modals/TaskDetails";
@@ -9,7 +10,6 @@ import AddReminder from "../assets/Modals/AddReminder";
 const Board = () => {
   const { projectId: paramProjectId } = useParams();
   const [projectId, setProjectId] = useState(paramProjectId);
-  const [taskId, setTaskId] = useState();
   const [projectName, setProjectName] = useState("");
   const [taskType, setTaskType] = useState("add");
   const [tasks, setTasks] = useState([]);
@@ -33,50 +33,41 @@ const Board = () => {
   useEffect(() => {
     if (projectId) {
       fetchProject();
-      fetchTasks();
-      getMembers();
     }
   }, [projectId]);
 
   const fetchProject = async () => {
     try {
-      console.log(
-        `Fetching project: https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}`
-      );
       const response = await axios.get(
         `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}`
       );
       const project = response.data;
       setProjectName(project.name || "Project Name");
-      const Columns = await fetchColumns();
-      setColumns(Columns || ["to do", "in progress", "done"]);
+      setColumns(project.columns || ["to do", "in progress", "done"]);
+      fetchTasks();
+      getMembers();
     } catch (error) {
       console.error("Error fetching project details:", error);
     }
   };
 
-  const fetchColumns = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
-      console.log(
-        `Fetching columns: https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/columns`
-      );
       const response = await axios.get(
-        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/columns`
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/tasks`
       );
-      const columns = response.data;
-      return columns;
+      const fetchedTasks = response.data.tasks;
+      setTasks(fetchedTasks || []);
     } catch (error) {
-      console.error("Error fetching columns:", error);
+      console.error("Error fetching tasks:", error);
     }
-  };
+  }, [projectId]);
 
   const handleSaveComment = async (taskId, comment) => {
     try {
       await axios.post(
         `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${taskId}/comments`,
-        {
-          text: comment,
-        },
+        { text: comment },
         { headers: requestHeaders }
       );
       fetchTasks();
@@ -112,59 +103,24 @@ const Board = () => {
     setOpenTaskDetails(true);
   };
 
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get(
-        `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/tasks`
-      );
-      const tasks = response.data.tasks;
-      setTasks(tasks || []);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    }
-  };
-
   const handleSaveTask = async (task) => {
+    console.log(task);
     const newTask = { ...task };
     try {
       if (taskType === "add") {
-        await axios
-          .post(
-            `https://4wvk44j3-7001.euw.devtunnels.ms/api/task`,
-            {
-              ...newTask,
-            },
-            { headers: requestHeaders }
-          )
-          .then(() => {
-            fetchTasks();
-          });
-        setTasks((prevTasks) => [...prevTasks, newTask]);
+        await axios.post(
+          "https://4wvk44j3-7001.euw.devtunnels.ms/api/task",
+          newTask,
+          { headers: requestHeaders }
+        );
       } else {
-        let statusBoard;
-        if (currentStatus === "to do") {
-          statusBoard = 0;
-        } else if (currentStatus === "in progress") {
-          statusBoard = 1;
-        } else if (currentStatus === "in review") {
-          statusBoard = 2;
-        } else if (currentStatus === "testing") {
-          statusBoard = 3;
-        } else {
-          statusBoard = 4;
-        }
-        await axios
-          .put(
-            `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${currentTask.id}`,
-            {
-              ...newTask,
-            },
-            { headers: requestHeaders }
-          )
-          .then(() => {
-            fetchTasks();
-          });
+        await axios.put(
+          `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${currentTask.id}`,
+          newTask,
+          { headers: requestHeaders }
+        );
       }
+      fetchTasks();
       setOpenAddEditTask(false);
     } catch (error) {
       console.error("Error saving task:", error);
@@ -173,14 +129,11 @@ const Board = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios
-        .delete(`https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${id}`, {
-          headers: requestHeaders,
-        })
-        .then(() => {
-          fetchTasks();
-        });
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+      await axios.delete(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${id}`,
+        { headers: requestHeaders }
+      );
+      fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
     }
@@ -188,9 +141,6 @@ const Board = () => {
 
   const getMembers = async () => {
     try {
-      console.log(
-        `Fetching members: https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/users`
-      );
       const response = await axios.get(
         `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/${projectId}/users`
       );
@@ -206,13 +156,10 @@ const Board = () => {
       try {
         await axios.post(
           `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/add-columns`,
-          {
-            projectId: projectId,
-            columnNames: [newColumn],
-          },
+          { projectId, columnNames: [newColumn] },
           { headers: requestHeaders }
         );
-        fetchProject(); // Fetch updated project data
+        fetchProject();
       } catch (error) {
         console.error("Error adding column:", error);
       }
@@ -220,28 +167,24 @@ const Board = () => {
   };
 
   const sortColumns = (columns) => {
-    const sortLikeThis = [
-      "to do",
-      "in progress",
-      "in review",
-      "testing",
-      "done",
-    ];
-
-    return columns.sort((a, b) => {
-      const orderA = sortLikeThis.indexOf(a);
-      const orderB = sortLikeThis.indexOf(b);
-      return orderA - orderB;
-    });
+    const sortOrder = ["To Do", "In Progress", "in review", "testing", "Done"];
+    return columns.sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b));
   };
 
   const renderTasks = (status) => {
     const statusMapping = {
-      "to do": 0,
-      "in progress": 1,
+      "To Do": 0,
+      "In Progress": 1,
       "in review": 2,
       testing: 3,
-      done: 4,
+      Done: 4,
+    };
+
+    const taskPriorityToImage = {
+      0: "/problem-green.png",
+      1: "/problem-yellow.png",
+      2: "/problem-orange.png",
+      3: "/problem-red.png",
     };
 
     const statusValue = statusMapping[status];
@@ -269,6 +212,15 @@ const Board = () => {
                 </span>
               ))}
           </div>
+          {console.log(task)}
+          <div className="flex justify-end absolute bottom-3 right-1">
+            <img
+              src={taskPriorityToImage[task.priority]}
+              alt="priority-icon"
+              className="w-5"
+            />
+          </div>
+
           <div className="flex justify-end absolute top-3 right-1">
             <button
               onClick={(e) => {
@@ -344,7 +296,7 @@ const Board = () => {
             className="bg-[#FFDF92] shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg relative"
           >
             <h2 className="text-xl font-[550] mb-2 capitalize">{status}</h2>
-            {status === "to do" && (
+            {status === "To Do" && (
               <button
                 onClick={() => openAddTask(status)}
                 className="bg-[#FFDF92] text-black text-2xl font-semibold py-2 rounded mb-2 absolute top-3 right-6"
