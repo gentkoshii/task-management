@@ -106,26 +106,28 @@ const AddEditTask = ({
           />
         </div>
 
-        <div className="mt-3 flex flex-col space-y-1">
-          <label htmlFor="status" className="text-sm">
-            Status
-          </label>
-          <select
-            id="Status"
-            value={statusValueTop}
-            onChange={(e) => setStatusValueTop(e.target.value)}
-            className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
-          >
-            <option value="" aria-readonly>
-              Select Status
-            </option>
-            <option value="0">To Do</option>
-            <option value="1">In Progress</option>
-            <option value="2">In Review</option>
-            <option value="3">Testing</option>
-            <option value="4">Done</option>
-          </select>
-        </div>
+        {type === "edit" && (
+          <div className="mt-3 flex flex-col space-y-1">
+            <label htmlFor="status" className="text-sm">
+              Status
+            </label>
+            <select
+              id="Status"
+              value={statusValueTop}
+              onChange={(e) => setStatusValueTop(e.target.value)}
+              className="bg-transparent px-3 py-2 outline-none rounded-md text-sm border border-gray-500 focus:outline-[#FFDF92] ring-1"
+            >
+              <option value="" aria-readonly>
+                Select Status
+              </option>
+              <option value="0">To Do</option>
+              <option value="1">In Progress</option>
+              <option value="2">In Review</option>
+              <option value="3">Testing</option>
+              <option value="4">Done</option>
+            </select>
+          </div>
+        )}
 
         <div className="mt-3 flex flex-col space-y-1">
           <label htmlFor="priority" className="text-sm">
