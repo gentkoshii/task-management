@@ -41,10 +41,24 @@ const TaskDetails = ({
     if (task) {
       fetchSubtasks();
       fetchComments();
-      setAssignedMembers(task.assignedMembers || []);
+      fetchAssignedMembers(task.id);
       fetchAttachments();
     }
   }, [task]);
+
+  const fetchAssignedMembers = async (taskId) => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/${taskId}/assigned-users`,
+        {
+          headers: requestHeaders,
+        }
+      );
+      setAssignedMembers(response.data || []);
+    } catch (error) {
+      console.error("Failed to fetch members:", error);
+    }
+  };
 
   const fetchSubtasks = async () => {
     try {
@@ -58,7 +72,6 @@ const TaskDetails = ({
         }
       );
       setSubtasks(response.data);
-      onSaveSubtasks(response.data); // Update the parent component if necessary
     } catch (error) {
       console.error("Failed to fetch subtasks:", error);
     }
@@ -106,7 +119,6 @@ const TaskDetails = ({
     );
 
     setSubtasks(updatedSubtasks);
-    onSaveSubtasks(updatedSubtasks);
 
     try {
       await axios.patch(
@@ -276,12 +288,9 @@ const TaskDetails = ({
 
   const assignMember = async (e) => {
     const memberId = e.target.value;
-    const member = members.find((m) => m.id === memberId);
+    const member = members.find((m) => m.userId === memberId);
 
     if (member) {
-      console.log("Assigning member:", member); // Log the member being assigned
-      console.log("Task ID:", task.id, "User ID:", memberId); // Log the task and user IDs
-
       try {
         const response = await axios.post(
           "https://4wvk44j3-7001.euw.devtunnels.ms/api/task/assign-user",
@@ -419,12 +428,12 @@ const TaskDetails = ({
                   <li
                     key={index}
                     className={`flex items-center text-sm ${
-                      subtask.completed ? "line-through text-gray-500" : ""
+                      subtask.isCompleted ? "line-through text-gray-500" : ""
                     }`}
                   >
                     <input
                       type="checkbox"
-                      checked={subtask.completed || false}
+                      checked={subtask.isCompleted || false}
                       onChange={() => handleSubtaskCompletion(index)}
                       className="mr-2"
                     />
@@ -591,7 +600,7 @@ const TaskDetails = ({
             >
               <option value="">Assign Member</option>
               {members.map((member) => (
-                <option key={member.id} value={member.id}>
+                <option key={member.userId} value={member.userId}>
                   {member.firstName} {member.lastName}
                 </option>
               ))}
