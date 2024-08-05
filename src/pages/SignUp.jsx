@@ -82,9 +82,9 @@ function SignUp() {
               )}
               <h4 className={textClass}>TaskFlow</h4>
             </div>
-            <h4 className={`text-sm md:text-base ${textClass}`}>
+            <h6 className={`text-sm md:text-base ${textClass}`}>
               Sign Up To Continue
-            </h4>
+            </h6>
             <input
               className={`${input} text-sm md:text-base`}
               type="text"
@@ -121,7 +121,7 @@ function SignUp() {
             <button
               type="submit"
               id="signupButton"
-              className={`h-10 w-24 rounded-4 ${
+              className={`h-14 w-28 rounded-4 ${
                 darkMode
                   ? "bg-gray-700 border-gray-600 text-white"
                   : "bg-[#FFD56F] border-black text-black"

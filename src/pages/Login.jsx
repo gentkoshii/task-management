@@ -99,14 +99,15 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button
-              type="submit"
-              id="loginButton"
-              className={`h-10 w-24 rounded-4 ${darkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-[#FFD56F] border-black text-black"} text-sm md:text-xl`}
-              disabled={loading}
-            >
-              {loading ? "Logging In..." : "Log In"}
-            </button>
+          <button
+            type="submit"
+            id="loginButton"
+            className={`h-14 w-28 rounded-4 ${darkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-[#FFD56F] border-black text-black"} text-xxs md:text-lg`}
+            disabled={loading}
+          >
+            {loading ? "Logging In..." : "Log In"}
+          </button>
+
             <h4 className={`text-sm md:text-base ${textClass}`}>Don't Have An Account?</h4>
             <Link to="/signup" className={`${linkClass} no-underline`}>
               <h4 className={`text-sm md:text-base ${linkClass}`}>Sign Up</h4>
