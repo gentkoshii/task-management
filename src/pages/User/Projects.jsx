@@ -80,7 +80,7 @@ const Projects = () => {
     ? "bg-slate-800 text-white hover:bg-slate-700"
     : "bg-gray-400 text-white hover:bg-gray-500";
   return (
-    <div className="flex flex-col gap-10 p-10 dark:bg-slate-900">
+    <div className="relative flex flex-col gap-10 p-10 dark:bg-slate-900 z-10">
       <div>
         <button
           className={`text-lg my-3 px-4 py-2 rounded hover:-translate-y-1 ${buttonBgClass} text-black`}
@@ -88,7 +88,9 @@ const Projects = () => {
         >
           Create a new Project
         </button>
-        {isAddProjectOpen && (
+      </div>
+      {isAddProjectOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <AddProject
             projectName={newProjectName}
             setProjectName={setNewProjectName}
@@ -97,8 +99,8 @@ const Projects = () => {
             onSaveProject={handleSaveProject}
             onCancel={() => setIsAddProjectOpen(false)}
           />
-        )}
-      </div>
+        </div>
+      )}
       <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-1 gap-5">
         {projects.map((project) => (
           <div

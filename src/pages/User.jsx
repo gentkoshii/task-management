@@ -76,19 +76,21 @@ const User = () => {
             isSidebarOpen ? "flex" : "hidden "
           } md:flex`}
         >
-          <div className="flex items-center gap-6">
+          <div className="flex items-centere gap-6">
             <img
               src={profilePic}
               title="Profile Picture"
               alt="avatar"
-              className="h-8 w-8 rounded-full border-1 border-black"
+              className="h-8 w-8 rounded-full "
             />
-            <p className="text-xl">{name}</p>
+            <p className="text-xl capitalize">{name}</p>
           </div>
           <div className="flex flex-col py-24 gap-1">
             <Link
               className={`text-md font-semibold no-underline hover:translate-x-[2px] pl-6 ${linkTextClass} ${
-                activeLink === "dashboard" ? `${linkBgClass} w-full rounded-md` : ""
+                activeLink === "dashboard"
+                  ? `${linkBgClass} w-full rounded-md`
+                  : ""
               }`}
               onClick={() => setActiveLink("dashboard")}
             >
@@ -96,7 +98,9 @@ const User = () => {
             </Link>
             <Link
               className={`text-md font-semibold no-underline hover:translate-x-[2px] pl-6 ${linkTextClass} ${
-                activeLink === "projects" ? `${linkBgClass} w-full rounded-md` : ""
+                activeLink === "projects"
+                  ? `${linkBgClass} w-full rounded-md`
+                  : ""
               }`}
               onClick={() => setActiveLink("projects")}
             >
@@ -105,19 +109,19 @@ const User = () => {
           </div>
           <div>
             <button onClick={handleLogout} className="flex gap-2">
-            {darkMode ? (
-              <img
-                src="logout-white.png"
-                alt="logout"
-                className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
-              /> 
-          ) : (
-            <img
-            src="logout.png"
-            alt="logout"
-            className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
-          />
-          )}
+              {darkMode ? (
+                <img
+                  src="logout-white.png"
+                  alt="logout"
+                  className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
+                />
+              ) : (
+                <img
+                  src="logout.png"
+                  alt="logout"
+                  className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
+                />
+              )}
               Sign Out
             </button>
           </div>

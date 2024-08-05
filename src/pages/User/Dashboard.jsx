@@ -6,10 +6,13 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
   const [totalProjectsCount, setTotalProjectsCount] = useState(0);
+  const [myTasks, setMyTasks] = useState([]);
+  const [myCompletedTasksCount, setMyCompletedTasksCount] = useState(0);
   const { darkMode } = useTheme();
 
   useEffect(() => {
     fetchProjects();
+    fetchMyTasks();
   }, []);
 
   const requestHeaders = {
@@ -64,6 +67,25 @@ const Dashboard = () => {
     }
   };
 
+  const fetchMyTasks = async () => {
+    try {
+      const response = await axios.get(
+        `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/my-tasks`,
+        { headers: requestHeaders }
+      );
+      const myTasksData = response.data;
+      setMyTasks(myTasksData);
+
+      // Count completed tasks
+      const completedMyTasks = myTasksData.filter(
+        (task) => task.status === "done"
+      ).length;
+      setMyCompletedTasksCount(completedMyTasks);
+    } catch (error) {
+      console.error("Error fetching my tasks:", error);
+    }
+  };
+
   const calculatePercentage = (completed, total) => {
     return total === 0 ? 0 : (completed / total) * 100;
   };
@@ -93,11 +115,6 @@ const Dashboard = () => {
     );
   };
 
-  const totalTasks = projects.reduce(
-    (total, project) => total + (project.tasks?.length || 0),
-    0
-  );
-
   return (
     <div className="p-4 m-5">
       <h1 className="text-2xl font-semibold dark:text-white">
@@ -105,8 +122,7 @@ const Dashboard = () => {
       </h1>
       <div className="mt-4 dark:text-white">
         <p>Total Projects you are working on: {totalProjectsCount}</p>
-        <p>Total Tasks you are working on: {totalTasks}</p>
-        <p>Completed Tasks: {completedTasksCount}</p>
+        <p>Total Tasks you are working on: {myTasks.length}</p>
         <div className="mt-2 grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-1 gap-5 ">
           {projects.map((project) => {
             const totalTasks = project.tasks?.length || 0;
