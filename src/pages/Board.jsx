@@ -224,10 +224,11 @@ const Board = () => {
     };
 
     const taskPriorityToImage = {
-      0: "/problem-green.png",
-      1: "/problem-yellow.png",
-      2: "/problem-orange.png",
-      3: "/problem-red.png",
+      0: "/low.png",
+      1: "/low.png",
+      2: "/medium.png",
+      3: "/high.png",
+      4: "/critical.png",
     };
 
     const statusValue = statusMapping[status];
