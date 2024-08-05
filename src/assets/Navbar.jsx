@@ -182,14 +182,14 @@ const Navbar = () => {
                     onClose={toggleNotifications}
                   />
                 )}
-                <button>
+                <Link to={"/user"}>
                   <img
                     src={profilePic}
                     alt="profile"
                     className="rounded-5 w-6 h-6"
                     style={{ minWidth: "32px", minHeight: "32px" }}
                   />
-                </button>
+                </Link>
                 <button onClick={handleLogout}>
                   {darkMode ? (
                     <img
