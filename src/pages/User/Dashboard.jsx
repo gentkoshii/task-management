@@ -79,7 +79,7 @@ const Dashboard = () => {
             borderRadius: "50%",
           }}
         >
-          <span className="text-xl font-semibold text-[#fccd61]">
+          <span className="text-xl font-semibold text-[#141441] dark:">
             {Math.round(percentage)}%
           </span>
         </div>
@@ -93,23 +93,24 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="p-4 m-5 dark:text-white">
-      <h1 className="text-2xl font-semibold ">Welcome to TaskFlow</h1>
-      <div className="mt-4">
+    <div className="p-4 m-5">
+      <h1 className="text-2xl font-semibold dark:text-white">
+        Welcome to TaskFlow
+      </h1>
+      <div className="mt-4 dark:text-white">
         <p>Total Projects you are working on: {totalProjectsCount}</p>
         <p>Total Tasks you are working on: {totalTasks}</p>
         <p>Completed Tasks: {completedTasksCount}</p>
-        <div className="mt-2 grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-1 gap-5">
+        <div className="mt-2 grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-1 gap-5 ">
           {projects.map((project) => {
             const totalTasks = project.tasks?.length || 0;
             const completedTasksInProject =
-              project.tasks?.filter((task) => task.status === "done").length ||
-              0;
+              project.tasks?.filter((task) => task.status === 4).length || 0;
 
             return (
               <div
                 key={project.id}
-                className="border p-4 w-full grid-rows-4 items-center rounded-lg"
+                className="border p-4 w-full grid-rows-4 items-center rounded-lg bg-white dark:text-black"
               >
                 <div className="text-left">
                   <h2 className="text-xl font-semibold">{project.name}</h2>
