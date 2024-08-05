@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import AddEditTask from "../assets/Modals/AddEditTask";
 import TaskDetails from "../assets/Modals/TaskDetails";
 import InviteMembers from "../assets/Modals/InviteMembers";
+import AddMembers from "../assets/Modals/AddMembers";
 import axios from "axios";
 import AddReminder from "../assets/Modals/AddReminder";
 import { useJwt } from "react-jwt";
@@ -23,6 +24,7 @@ const Board = () => {
   const [openAddEditTask, setOpenAddEditTask] = useState(false);
   const [openTaskDetails, setOpenTaskDetails] = useState(false);
   const [openInviteMembers, setOpenInviteMembers] = useState(false);
+  const [openAddMembers, setOpenAddMembers] = useState(false);
   const [openAddReminderModal, setOpenAddReminderModal] = useState(false);
   const [reminderTaskId, setReminderTaskId] = useState(null);
 
@@ -345,6 +347,12 @@ const Board = () => {
             >
               Invite Members
             </button>
+            <button
+              onClick={() => setOpenAddMembers(true)}
+              className=" px-3 py-2 bg-[#ffe7ae] dark:bg-gray-50 text-black rounded"
+            >
+              Add Members
+            </button>
 
             <div className=" text-black px-3 py-2 dark:bg-gray-50 rounded border capitalize">
               Members:{" "}
@@ -416,6 +424,14 @@ const Board = () => {
         <InviteMembers
           setOpenInviteMembers={setOpenInviteMembers}
           projectId={projectId}
+        />
+      )}
+
+      {openAddMembers && (
+        <AddMembers
+          setOpenAddMembers={setOpenAddMembers}
+          projectId={projectId}
+          onMemberAdded={fetchProject}
         />
       )}
     </div>
