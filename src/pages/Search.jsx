@@ -50,8 +50,8 @@ const Search = () => {
     navigate(`/projects/${projectId}`);
   };
 
-  if (loading) return <div className="min-h-[582px]">Loading...</div>;
-  if (error) return <div className="min-h-[582px]">Error: {error}</div>;
+  if (loading) return <div className="min-h-[587px]">Loading...</div>;
+  if (error) return <div className="min-h-[587px]">Error: {error}</div>;
 
   const gradientStyle = darkMode
     ? "bg-[linear-gradient(135deg,_#1F2937,_#497188_90%)]"

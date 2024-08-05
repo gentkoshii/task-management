@@ -62,7 +62,9 @@ const User = () => {
   const buttonBgClass = darkMode ? "bg-slate-400" : "bg-[#FFDF92]";
 
   return (
-    <div className={`flex flex-col py-8 px-6 ${containerBgClass}`}>
+    <div
+      className={`flex flex-col min-h-[587px] py-8 px-6 ${containerBgClass}`}
+    >
       <div className="flex w-full flex-col md:flex-row justify-center gap-2 md:gap-14">
         {/* Sidebar */}
         <button
