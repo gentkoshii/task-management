@@ -6,6 +6,7 @@ import TaskDetails from "../assets/Modals/TaskDetails";
 import InviteMembers from "../assets/Modals/InviteMembers";
 import axios from "axios";
 import AddReminder from "../assets/Modals/AddReminder";
+import { useJwt } from "react-jwt";
 
 const Board = () => {
   const { projectId: paramProjectId } = useParams();
@@ -25,9 +26,13 @@ const Board = () => {
   const [openAddReminderModal, setOpenAddReminderModal] = useState(false);
   const [reminderTaskId, setReminderTaskId] = useState(null);
 
+  const token = localStorage.getItem("token");
+  const { decodedToken } = useJwt(token);
+  const userId = decodedToken?.sub;
+
   const requestHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${token}`,
   };
 
   useEffect(() => {
@@ -104,7 +109,6 @@ const Board = () => {
   };
 
   const handleSaveTask = async (task) => {
-    console.log(task);
     const newTask = { ...task };
     try {
       if (taskType === "add") {
@@ -171,6 +175,45 @@ const Board = () => {
     return columns.sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b));
   };
 
+  const onDragEnd = async (result) => {
+    const { source, destination, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+
+    if (source.droppableId !== destination.droppableId) {
+      const statusMapping = {
+        "To Do": 0,
+        "In Progress": 1,
+        "in review": 2,
+        testing: 3,
+        Done: 4,
+      };
+
+      const newStatus = statusMapping[destination.droppableId];
+
+      const updatedTasks = tasks.map((task) => {
+        if (task.id === parseInt(draggableId)) {
+          task.status = newStatus;
+        }
+        return task;
+      });
+
+      setTasks(updatedTasks);
+
+      try {
+        await axios.patch(
+          `https://4wvk44j3-7001.euw.devtunnels.ms/api/task/update-status`,
+          { taskId: parseInt(draggableId), status: newStatus, userId },
+          { headers: requestHeaders }
+        );
+        fetchTasks();
+      } catch (error) {
+        console.error("Error updating task status:", error);
+      }
+    }
+  };
+
   const renderTasks = (status) => {
     const statusMapping = {
       "To Do": 0,
@@ -191,68 +234,77 @@ const Board = () => {
 
     return tasks
       .filter((task) => task.status === statusValue)
-      .map((task) => (
-        <div
-          key={task.id}
-          onClick={() => handleTaskClick(task)}
-          className="mb-2 px-2 py-2 border rounded-lg shadow-md bg-white cursor-pointer hover:bg-gray-100 relative"
-        >
-          <h3 className="w-40 text-lg font-semibold capitalize">
-            {task.title}
-          </h3>
-          <p className="text-gray-600 text-sm overflow-hidden overflow-ellipsis first-letter:uppercase">
-            {task.description}
-          </p>
-          <div className="flex flex-wrap w-52 uppercase">
-            {task.tags &&
-              task.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-200 text-gray-800 px-2 rounded-md text-sm mx-1"
-                >
-                  {tag}
-                </span>
-              ))}
-          </div>
-          {console.log(task)}
-          <div className="flex justify-end absolute bottom-3 right-1">
-            <img
-              src={taskPriorityToImage[task.priority]}
-              alt="priority-icon"
-              className="w-4 h-4"
-            />
-          </div>
+      .map((task, index) => (
+        <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              onClick={() => handleTaskClick(task)}
+              className="mb-2 px-2 py-2 border rounded-lg shadow-md bg-white cursor-pointer hover:bg-gray-100 relative"
+            >
+              <h3 className="w-40 text-lg font-semibold capitalize">
+                {task.title}
+              </h3>
+              <p className="text-gray-600 text-sm overflow-hidden overflow-ellipsis first-letter:uppercase">
+                {task.description}
+              </p>
+              <div className="flex flex-wrap w-52 uppercase">
+                {task.tags &&
+                  task.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-200 text-gray-800 px-2 rounded-md text-sm mx-1 mt-1"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+              </div>
+              <div className="flex justify-end absolute bottom-3 right-1">
+                <img
+                  src={taskPriorityToImage[task.priority]}
+                  alt="priority-icon"
+                  className="mr-2 w-5 h-5"
+                />
+              </div>
 
-          <div className="flex justify-end absolute top-3 right-1">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpenAddReminder(task);
-              }}
-              className="text-white px-2 rounded"
-            >
-              <img src="/timer.png" alt="reminder-icon" className="w-4 h-4" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                openEditTask(task);
-              }}
-              className=" text-white  rounded"
-            >
-              <img src="/edit.png" alt="edit-icon" className="w-4 h-4" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteTask(task.id);
-              }}
-              className=" text-white px-2 rounded"
-            >
-              <img src="/bin.png" alt="delete-icon" className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+              <div className="flex justify-end absolute top-3 right-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAddReminder(task);
+                  }}
+                  className="text-white px-2 rounded"
+                >
+                  <img
+                    src="/timer.png"
+                    alt="reminder-icon"
+                    className="w-4 h-4"
+                  />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openEditTask(task);
+                  }}
+                  className=" text-white  rounded"
+                >
+                  <img src="/edit.png" alt="edit-icon" className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteTask(task.id);
+                  }}
+                  className=" text-white px-2 rounded"
+                >
+                  <img src="/bin.png" alt="delete-icon" className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </Draggable>
       ));
   };
 
@@ -267,15 +319,17 @@ const Board = () => {
             <select
               value={newColumn}
               onChange={(e) => setNewColumn(e.target.value)}
-              className="border py-2 px-1 rounded w-full"
+              className="border px-1 rounded w-full"
             >
               <option value="">Select Column</option>
+
               {["in review", "testing"].map((column) => (
                 <option key={column} value={column}>
                   {column.charAt(0).toUpperCase() + column.slice(1)}
                 </option>
               ))}
             </select>
+
             <button
               onClick={addColumn}
               className="bg-[#ffe7ae] dark:bg-gray-50 text-xl text-black px-3 py-2 rounded"
@@ -290,6 +344,7 @@ const Board = () => {
             >
               Invite Members
             </button>
+
             <div className=" text-black px-3 py-2 dark:bg-gray-50 rounded border capitalize">
               Members:{" "}
               {members && members.map((member) => member.firstName).join(", ")}
@@ -297,26 +352,35 @@ const Board = () => {
           </div>
         </div>
       </div>
-      <div className="flex overflow-x-auto pb-12 ">
-        {sortColumns(columns).map((status) => (
-          <div
-            key={status}
-            className="bg-[#FFDF92] dark:bg-gray-100 shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg relative"
-          >
-            <h2 className="text-xl font-[550] mb-2 capitalize">{status}</h2>
-            {status === "To Do" && (
-              <button
-                onClick={() => openAddTask(status)}
-                className="bg-transparent text-black text-2xl font-semibold py-2 rounded mb-2 absolute top-3 right-6"
-              >
-                +
-              </button>
-            )}
-
-            <div className="overflow-y-auto">{renderTasks(status)}</div>
-          </div>
-        ))}
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex overflow-x-auto pb-12">
+          {sortColumns(columns).map((status) => (
+            <Droppable key={status} droppableId={status}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="bg-[#FFDF92] dark:bg-gray-100 shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg relative"
+                >
+                  <h2 className="text-xl font-[550] mb-2 capitalize">
+                    {status}
+                  </h2>
+                  {status === "To Do" && (
+                    <button
+                      onClick={() => openAddTask(status)}
+                      className="bg-transparent text-black text-2xl font-semibold py-2 rounded mb-2 absolute top-3 right-6"
+                    >
+                      +
+                    </button>
+                  )}
+                  <div className="overflow-y-auto">{renderTasks(status)}</div>
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </div>
+      </DragDropContext>
 
       {openAddEditTask && (
         <AddEditTask
