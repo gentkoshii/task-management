@@ -56,30 +56,42 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const icon = "h-8 w-8 cursor-pointer rounded-full border border-black p-1 resize-none";
-  const containerClass = darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900';
-  const linkClass = darkMode ? 'text-gray-200 hover:text-blue-400' : 'text-black hover:text-blue-600';
-  const sidebarClass = darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900';
+  const icon =
+    "h-8 w-8 cursor-pointer rounded-full border border-black p-1 resize-none";
+  const containerClass = darkMode
+    ? "bg-gray-800 text-gray-200"
+    : "bg-white text-gray-900";
+  const linkClass = darkMode
+    ? "text-gray-200 hover:text-blue-400"
+    : "text-black hover:text-blue-600";
+  const sidebarClass = darkMode
+    ? "bg-gray-800 text-gray-200"
+    : "bg-white text-gray-900";
 
   return (
-    <div className={`flex justify-center items-center p-8 shadow-md w-full ${containerClass}`}>
+    <div
+      className={`flex justify-center items-center p-8 shadow-md w-full ${containerClass}`}
+    >
       <div className="flex flex-row sm:gap-5 md:gap-10 lg:gap-16 items-center justify-between sm:w-fit md:w-full lg:w-fit">
         <div className="flex">
-          <Link to="/" className={`flex items-center gap-2 ${linkClass} no-underline`}>
+          <Link
+            to="/"
+            className={`flex items-center gap-2 ${linkClass} no-underline`}
+          >
             <div className="flex flex-row items-center justify-center gap-2">
               {darkMode ? (
                 <img
                   src="../../../public/1.1.png"
                   alt="logo"
                   className="rounded-md h-8 w-8"
-                  style={{ minWidth: '32px', minHeight: '32px' }}
+                  style={{ minWidth: "32px", minHeight: "32px" }}
                 />
               ) : (
                 <img
                   src="../../../public/1.png"
                   alt="logo"
                   className="rounded-md h-8 w-8"
-                  style={{ minWidth: '32px', minHeight: '32px' }}
+                  style={{ minWidth: "32px", minHeight: "32px" }}
                 />
               )}
               <h4 className="m-0 md:text-lg lg:text-2xl">TaskFlow</h4>
@@ -94,13 +106,19 @@ const Navbar = () => {
           <Link to="/about" className={`${linkClass} no-underline transition`}>
             <h5 className="m-0 text-lg md:text-base lg:text-xl">About</h5>
           </Link>
-          <Link to="/features" className={`${linkClass} no-underline transition`}>
+          <Link
+            to="/features"
+            className={`${linkClass} no-underline transition`}
+          >
             <h5 className="m-0 text-lg md:text-base lg:text-xl">Features</h5>
           </Link>
           <Link to="/help" className={`${linkClass} no-underline transition`}>
             <h5 className="m-0 text-lg md:text-base lg:text-xl">Help</h5>
           </Link>
-          <Link to="/contact" className={`${linkClass} no-underline transition`}>
+          <Link
+            to="/contact"
+            className={`${linkClass} no-underline transition`}
+          >
             <h5 className="m-0 text-lg md:text-base lg:text-xl">Contact</h5>
           </Link>
 
@@ -124,7 +142,7 @@ const Navbar = () => {
                     src="/light-mode.png"
                     alt="light mode icon"
                     className="h-8 w-8 rounded-full cursor-pointer border border-black p-1 resize-none"
-                    style={{ minWidth: '32px', minHeight: '32px' }}
+                    style={{ minWidth: "32px", minHeight: "32px" }}
                   />
                 </div>
               ) : (
@@ -133,7 +151,7 @@ const Navbar = () => {
                     src="/dark-mode.png"
                     alt="dark mode icon"
                     className={icon}
-                    style={{ minWidth: '32px', minHeight: '32px' }}
+                    style={{ minWidth: "32px", minHeight: "32px" }}
                   />
                 </div>
               )}
@@ -146,14 +164,14 @@ const Navbar = () => {
                       src="/bell-ring-white.png"
                       alt="notifications"
                       className={icon}
-                      style={{ minWidth: '32px', minHeight: '32px' }}
+                      style={{ minWidth: "32px", minHeight: "32px" }}
                     />
                   ) : (
                     <img
                       src="/bell-ring.png"
                       alt="notifications"
                       className={icon}
-                      style={{ minWidth: '32px', minHeight: '32px' }}
+                      style={{ minWidth: "32px", minHeight: "32px" }}
                     />
                   )}
                 </button>
@@ -168,8 +186,8 @@ const Navbar = () => {
                   <img
                     src={profilePic}
                     alt="profile"
-                    className={`${icon} p-0`}
-                    style={{ minWidth: '32px', minHeight: '32px' }}
+                    className="rounded-5 w-6 h-6"
+                    style={{ minWidth: "32px", minHeight: "32px" }}
                   />
                 </button>
                 <button onClick={handleLogout}>
@@ -178,14 +196,14 @@ const Navbar = () => {
                       src="/logout-white.png"
                       alt="logout"
                       className="h-6 w-6 cursor-pointer"
-                      style={{ minWidth: '24px', minHeight: '24px' }}
+                      style={{ minWidth: "24px", minHeight: "24px" }}
                     />
                   ) : (
                     <img
                       src="/logout.png"
                       alt="logout"
                       className="h-6 w-6 cursor-pointer"
-                      style={{ minWidth: '24px', minHeight: '24px' }}
+                      style={{ minWidth: "24px", minHeight: "24px" }}
                     />
                   )}
                 </button>
@@ -200,27 +218,32 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="md:hidden flex items-center h-8 w-8" onClick={toggleMenu}>
+        <div
+          className="md:hidden flex items-center h-8 w-8"
+          onClick={toggleMenu}
+        >
           {darkMode ? (
             <img
               src="/menu-white.png"
               alt="menu"
               className=""
-              style={{ minWidth: '32px', minHeight: '32px' }}
+              style={{ minWidth: "32px", minHeight: "32px" }}
             />
           ) : (
             <img
               src="/menu.png"
               alt="menu"
               className=""
-              style={{ minWidth: '32px', minHeight: '32px' }}
+              style={{ minWidth: "32px", minHeight: "32px" }}
             />
           )}
         </div>
       </div>
 
       {isMenuOpen && (
-        <div className={`fixed top-0 right-0 w-[50%] h-full ${sidebarClass} shadow-lg flex flex-col z-50`}>
+        <div
+          className={`fixed top-0 right-0 w-[50%] h-full ${sidebarClass} shadow-lg flex flex-col z-50`}
+        >
           <div className="flex justify-end p-8">
             <button onClick={toggleMenu} className={linkClass}>
               {darkMode ? (
@@ -228,14 +251,14 @@ const Navbar = () => {
                   src="/menu-white.png"
                   alt="menu"
                   className="h-7 w-7"
-                  style={{ minWidth: '28px', minHeight: '28px' }}
+                  style={{ minWidth: "28px", minHeight: "28px" }}
                 />
               ) : (
                 <img
                   src="/menu.png"
                   alt="menu"
                   className="h-7 w-7"
-                  style={{ minWidth: '28px', minHeight: '28px' }}
+                  style={{ minWidth: "28px", minHeight: "28px" }}
                 />
               )}
             </button>
@@ -247,14 +270,14 @@ const Navbar = () => {
                   src="/light-mode.png"
                   alt="light mode icon"
                   className={icon}
-                  style={{ minWidth: '32px', minHeight: '32px' }}
+                  style={{ minWidth: "32px", minHeight: "32px" }}
                 />
               ) : (
                 <img
                   src="/dark-mode.png"
                   alt="dark mode icon"
                   className={icon}
-                  style={{ minWidth: '32px', minHeight: '32px' }}
+                  style={{ minWidth: "32px", minHeight: "32px" }}
                 />
               )}
             </button>
@@ -267,14 +290,14 @@ const Navbar = () => {
                       src="/bell-ring-white.png"
                       alt="notifications"
                       className={icon}
-                      style={{ minWidth: '32px', minHeight: '32px' }}
+                      style={{ minWidth: "32px", minHeight: "32px" }}
                     />
                   ) : (
                     <img
                       src="/bell-ring.png"
                       alt="notifications"
                       className={icon}
-                      style={{ minWidth: '32px', minHeight: '32px' }}
+                      style={{ minWidth: "32px", minHeight: "32px" }}
                     />
                   )}
                 </button>
@@ -290,7 +313,7 @@ const Navbar = () => {
                     src={profilePic}
                     alt="profile"
                     className={`${icon} p-0`}
-                    style={{ minWidth: '32px', minHeight: '32px' }}
+                    style={{ minWidth: "32px", minHeight: "32px" }}
                   />
                 </button>
                 <button onClick={handleLogout}>
@@ -299,14 +322,14 @@ const Navbar = () => {
                       src="/logout-white.png"
                       alt="logout"
                       className="h-6 w-6 cursor-pointer"
-                      style={{ minWidth: '24px', minHeight: '24px' }}
+                      style={{ minWidth: "24px", minHeight: "24px" }}
                     />
                   ) : (
                     <img
                       src="/logout.png"
                       alt="logout"
                       className="h-6 w-6 cursor-pointer"
-                      style={{ minWidth: '24px', minHeight: '24px' }}
+                      style={{ minWidth: "24px", minHeight: "24px" }}
                     />
                   )}
                 </button>

@@ -76,7 +76,7 @@ const Projects = () => {
   const projectBgClass = darkMode
     ? "bg-[linear-gradient(135deg,_#1F2937,_#497188_90%)] text-white"
     : "bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)] text-black";
-    const deleteButtonClass = darkMode
+  const deleteButtonClass = darkMode
     ? "bg-slate-800 text-white hover:bg-slate-700"
     : "bg-gray-400 text-white hover:bg-gray-500";
   return (
@@ -104,12 +104,10 @@ const Projects = () => {
           <div
             key={project.id}
             onClick={() => handleClick(project.id)}
-            className={`${projectBgClass} h-[300px] p-4 rounded-lg shadow-md cursor-pointer hover:-translate-y-1`}
+            className={`${projectBgClass} h-[300px] p-4 rounded-lg shadow-md cursor-pointer hover:-translate-y-1 relative`}
           >
             <div className="text-xl font-semibold">{project.name}</div>
-            <div className="text-sm my-3">
-              {project.description}
-            </div>
+            <div className="text-sm my-3">{project.description}</div>
             <p className="text-sm mt-2">
               Created: {new Date(project.createdAt).toLocaleDateString()}
             </p>
@@ -123,7 +121,7 @@ const Projects = () => {
                 e.stopPropagation();
                 handleDeleteProject(project.id);
               }}
-              className={`mt-4 px-4 py-2 rounded ${deleteButtonClass}`}
+              className={`mt-4 px-4 py-2 rounded absolute bottom-4 ${deleteButtonClass}`}
             >
               Delete Project
             </button>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useTheme } from "../../context/ThemeContext";
 import axios from "axios";
 
 const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
   const [totalProjectsCount, setTotalProjectsCount] = useState(0);
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     fetchProjects();
@@ -14,6 +16,10 @@ const Dashboard = () => {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
+
+  const projectBgClass = darkMode
+    ? "bg-[linear-gradient(135deg,_#1F2937,_#497188_90%)] text-white"
+    : "bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)] text-black";
 
   const fetchProjects = async () => {
     try {
@@ -110,7 +116,7 @@ const Dashboard = () => {
             return (
               <div
                 key={project.id}
-                className="border p-4 w-full grid-rows-4 items-center rounded-lg bg-white dark:text-black"
+                className={`border p-4 w-full grid-rows-4 items-center rounded-lg ${projectBgClass} dark:text-black`}
               >
                 <div className="text-left">
                   <h2 className="text-xl font-semibold">{project.name}</h2>

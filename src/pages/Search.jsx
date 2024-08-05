@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 
 const Search = () => {
@@ -7,6 +8,7 @@ const Search = () => {
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { darkMode } = useTheme();
 
   const navigate = useNavigate();
 
@@ -20,14 +22,12 @@ const Search = () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch all projects
         const response = await axios.get(
           `https://4wvk44j3-7001.euw.devtunnels.ms/api/project/my-projects`,
           { headers: requestHeaders }
         );
         const projects = response.data;
 
-        // Filter projects based on searchQuery
         const filteredProjects = projects.filter((project) =>
           project.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -53,15 +53,14 @@ const Search = () => {
   if (loading) return <div className="min-h-[582px]">Loading...</div>;
   if (error) return <div className="min-h-[582px]">Error: {error}</div>;
 
-  const gradientStyle = {
-    background: "radial-gradient(circle at right , #FE9C5E, #FFEEDB 79%)",
-    backgroundSize: "fit",
-  };
+  const gradientStyle = darkMode
+    ? "bg-[linear-gradient(135deg,_#1F2937,_#497188_90%)]"
+    : "bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)]";
 
   return (
-    <div style={gradientStyle}>
+    <div className={gradientStyle}>
       <div className="flex flex-col w-[70%] ml-[15%] min-h-[502px] gap-10 p-10">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl font-semibold dark:text-white">
           Search Results for "{searchQuery}"
         </h2>
         <div className="w-full grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-6">
