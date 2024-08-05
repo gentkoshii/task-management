@@ -62,23 +62,27 @@ const Navbar = () => {
   const sidebarClass = darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900';
 
   return (
-    <div className={`flex justify-center items-center p-[34px] shadow-md w-full ${containerClass}`}>
+    <div className={`flex justify-center items-center p-8 shadow-md w-full ${containerClass}`}>
       <div className="flex flex-row sm:gap-5 md:gap-10 lg:gap-16 items-center justify-between sm:w-fit md:w-full lg:w-fit">
         <div className="flex">
           <Link to="/" className={`flex items-center gap-2 ${linkClass} no-underline`}>
             <div className="flex flex-row items-center justify-center gap-2">
-            {darkMode ? (
-          <img
-            src="../../../public/1.1.png"
-            alt="logo"
-            className="rounded-md h-8 w-8"
-          />          ) : (
-          <img
-            src="../../../public/1.png"
-            alt="logo"
-            className="rounded-md h-8 w-8"
-          />          )}              
-          <h4 className="m-0 md:text-lg lg:text-2xl">TaskFlow</h4>
+              {darkMode ? (
+                <img
+                  src="../../../public/1.1.png"
+                  alt="logo"
+                  className="rounded-md h-8 w-8"
+                  style={{ minWidth: '32px', minHeight: '32px' }}
+                />
+              ) : (
+                <img
+                  src="../../../public/1.png"
+                  alt="logo"
+                  className="rounded-md h-8 w-8"
+                  style={{ minWidth: '32px', minHeight: '32px' }}
+                />
+              )}
+              <h4 className="m-0 md:text-lg lg:text-2xl">TaskFlow</h4>
             </div>
           </Link>
         </div>
@@ -120,25 +124,70 @@ const Navbar = () => {
                     src="/light-mode.png"
                     alt="light mode icon"
                     className="h-8 w-8 rounded-full cursor-pointer border border-black p-1 resize-none"
+                    style={{ minWidth: '32px', minHeight: '32px' }}
                   />
                 </div>
               ) : (
                 <div className="flex-shrink-0">
-                  <img src="/dark-mode.png" alt="dark mode icon" className={icon} />
+                  <img
+                    src="/dark-mode.png"
+                    alt="dark mode icon"
+                    className={icon}
+                    style={{ minWidth: '32px', minHeight: '32px' }}
+                  />
                 </div>
               )}
             </div>
             {isLoggedIn ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 relative">
                 <button onClick={toggleNotifications}>
-                  <img src="/bell-ring.png" alt="notifications" className={icon} />
+                  {darkMode ? (
+                    <img
+                      src="/bell-ring-white.png"
+                      alt="notifications"
+                      className={icon}
+                      style={{ minWidth: '32px', minHeight: '32px' }}
+                    />
+                  ) : (
+                    <img
+                      src="/bell-ring.png"
+                      alt="notifications"
+                      className={icon}
+                      style={{ minWidth: '32px', minHeight: '32px' }}
+                    />
+                  )}
                 </button>
-                {showNotifications && <Notifications userId={userId} />}
+                {showNotifications && (
+                  <Notifications
+                    userId={userId}
+                    numberOfLatestNotifications={5}
+                    onClose={toggleNotifications}
+                  />
+                )}
                 <button>
-                  <img src={profilePic} alt="profile" className={`${icon} p-0`} />
+                  <img
+                    src={profilePic}
+                    alt="profile"
+                    className={`${icon} p-0`}
+                    style={{ minWidth: '32px', minHeight: '32px' }}
+                  />
                 </button>
                 <button onClick={handleLogout}>
-                  <img src="/logout.png" alt="logout" className="h-6 w-6 cursor-pointer" />
+                  {darkMode ? (
+                    <img
+                      src="/logout-white.png"
+                      alt="logout"
+                      className="h-6 w-6 cursor-pointer"
+                      style={{ minWidth: '24px', minHeight: '24px' }}
+                    />
+                  ) : (
+                    <img
+                      src="/logout.png"
+                      alt="logout"
+                      className="h-6 w-6 cursor-pointer"
+                      style={{ minWidth: '24px', minHeight: '24px' }}
+                    />
+                  )}
                 </button>
               </div>
             ) : (
@@ -152,40 +201,114 @@ const Navbar = () => {
         </div>
 
         <div className="md:hidden flex items-center h-8 w-8" onClick={toggleMenu}>
-{darkMode ? (
-          <img src="/menu-white.png" alt="menu" className="" />
-        ) : (
-          <img src="/menu.png" alt="menu" className="" />
-        )}        </div>
+          {darkMode ? (
+            <img
+              src="/menu-white.png"
+              alt="menu"
+              className=""
+              style={{ minWidth: '32px', minHeight: '32px' }}
+            />
+          ) : (
+            <img
+              src="/menu.png"
+              alt="menu"
+              className=""
+              style={{ minWidth: '32px', minHeight: '32px' }}
+            />
+          )}
+        </div>
       </div>
 
       {isMenuOpen && (
         <div className={`fixed top-0 right-0 w-[50%] h-full ${sidebarClass} shadow-lg flex flex-col z-50`}>
           <div className="flex justify-end p-8">
             <button onClick={toggleMenu} className={linkClass}>
-              <img src="/menu.png" alt="close menu" className="h-7 w-7" />
+              {darkMode ? (
+                <img
+                  src="/menu-white.png"
+                  alt="menu"
+                  className="h-7 w-7"
+                  style={{ minWidth: '28px', minHeight: '28px' }}
+                />
+              ) : (
+                <img
+                  src="/menu.png"
+                  alt="menu"
+                  className="h-7 w-7"
+                  style={{ minWidth: '28px', minHeight: '28px' }}
+                />
+              )}
             </button>
           </div>
           <div className="flex items-center justify-center gap-4 p-4">
             <button onClick={toggleDarkMode} className={linkClass}>
               {darkMode ? (
-                <img src="/light-mode.png" alt="light mode icon" className={icon} />
+                <img
+                  src="/light-mode.png"
+                  alt="light mode icon"
+                  className={icon}
+                  style={{ minWidth: '32px', minHeight: '32px' }}
+                />
               ) : (
-                <img src="/dark-mode.png" alt="dark mode icon" className={icon} />
+                <img
+                  src="/dark-mode.png"
+                  alt="dark mode icon"
+                  className={icon}
+                  style={{ minWidth: '32px', minHeight: '32px' }}
+                />
               )}
             </button>
 
             {isLoggedIn ? (
               <div className="flex items-center gap-3">
                 <button onClick={toggleNotifications}>
-                  <img src="/bell-ring.png" alt="notifications" className={icon} />
+                  {darkMode ? (
+                    <img
+                      src="/bell-ring-white.png"
+                      alt="notifications"
+                      className={icon}
+                      style={{ minWidth: '32px', minHeight: '32px' }}
+                    />
+                  ) : (
+                    <img
+                      src="/bell-ring.png"
+                      alt="notifications"
+                      className={icon}
+                      style={{ minWidth: '32px', minHeight: '32px' }}
+                    />
+                  )}
                 </button>
-                {showNotifications && <Notifications userId={userId} />}
+                {showNotifications && (
+                  <Notifications
+                    userId={userId}
+                    numberOfLatestNotifications={5}
+                    onClose={toggleNotifications}
+                  />
+                )}
                 <button>
-                  <img src={profilePic} alt="profile" className={`${icon} p-0`} />
+                  <img
+                    src={profilePic}
+                    alt="profile"
+                    className={`${icon} p-0`}
+                    style={{ minWidth: '32px', minHeight: '32px' }}
+                  />
                 </button>
                 <button onClick={handleLogout}>
-                  <img src="/logout.png" alt="logout" className="h-6 w-6 cursor-pointer" />
+                  {darkMode ? (
+                    <img
+                      src="/logout-white.png"
+                      alt="logout"
+                      className="h-6 w-6 cursor-pointer"
+                      style={{ minWidth: '24px', minHeight: '24px' }}
+                    />
+                  ) : (
+                    <img
+                      src="/logout.png"
+                      alt="logout"
+                      className="h-6 w-6 cursor-pointer"
+                      style={{ minWidth: '24px', minHeight: '24px' }}
+                    />
+                  )}
                 </button>
               </div>
             ) : (
