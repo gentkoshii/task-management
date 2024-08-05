@@ -198,7 +198,6 @@ const ProfilePage = () => {
                   style={{ display: "none" }}
                   onChange={(event) => setProfilePicture(event.currentTarget.files[0])}
                 />
-                <p className="text-gray-600 mt-2">Max 500kb</p>
               </div>
             </div>
 

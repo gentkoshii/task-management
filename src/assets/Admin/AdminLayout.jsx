@@ -28,7 +28,7 @@ const AdminLayout = () => {
 
   return (
     <div
-      className={`flex ${
+      className={`flex min-h-screen ${
         darkMode ? "bg-gray-900 text-gray-200" : "bg-white text-gray-800"
       }`}
     >
@@ -38,7 +38,7 @@ const AdminLayout = () => {
         toggleLogout={() => setShowLogoutConfirm(true)}
       />
       <div
-        className={`flex-1 transition-margin duration-300 ease-in-out h-full ${
+        className={`flex-1 transition-margin duration-300 ease-in-out ${
           isDrawerOpen ? "ml-64" : "ml-0"
         } md:ml-64`}
       >
@@ -48,7 +48,7 @@ const AdminLayout = () => {
         >
           <FontAwesomeIcon icon={isDrawerOpen ? faXmark : faBars} />
         </button>
-        <div className="p-10 h-full">
+        <div className="p-10">
           <Outlet />
         </div>
       </div>
