@@ -195,13 +195,15 @@ const Board = () => {
         <div
           key={task.id}
           onClick={() => handleTaskClick(task)}
-          className="mb-2 px-4 py-2 border rounded-lg shadow-md bg-white cursor-pointer hover:bg-gray-100 relative"
+          className="mb-2 px-2 py-2 border rounded-lg shadow-md bg-white cursor-pointer hover:bg-gray-100 relative"
         >
-          <h3 className="text-lg font-semibold capitalize">{task.title}</h3>
+          <h3 className="w-40 text-lg font-semibold capitalize">
+            {task.title}
+          </h3>
           <p className="text-gray-600 text-sm overflow-hidden overflow-ellipsis first-letter:uppercase">
             {task.description}
           </p>
-          <div className="flex flex-wrap uppercase">
+          <div className="flex flex-wrap w-52 uppercase">
             {task.tags &&
               task.tags.map((tag, index) => (
                 <span
@@ -217,7 +219,7 @@ const Board = () => {
             <img
               src={taskPriorityToImage[task.priority]}
               alt="priority-icon"
-              className="w-5"
+              className="w-4 h-4"
             />
           </div>
 
@@ -229,7 +231,7 @@ const Board = () => {
               }}
               className="text-white px-2 rounded"
             >
-              <img src="/timer.png" alt="reminder-icon" className="w-5" />
+              <img src="/timer.png" alt="reminder-icon" className="w-4 h-4" />
             </button>
             <button
               onClick={(e) => {
@@ -238,7 +240,7 @@ const Board = () => {
               }}
               className=" text-white  rounded"
             >
-              <img src="/edit.png" alt="edit-icon" className="w-5" />
+              <img src="/edit.png" alt="edit-icon" className="w-4 h-4" />
             </button>
             <button
               onClick={(e) => {
@@ -247,7 +249,7 @@ const Board = () => {
               }}
               className=" text-white px-2 rounded"
             >
-              <img src="/bin.png" alt="delete-icon" className="w-5" />
+              <img src="/bin.png" alt="delete-icon" className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -255,37 +257,43 @@ const Board = () => {
   };
 
   return (
-    <div className="min-h-[65.6vh] flex flex-col justify-between overflow-hidden">
-      <div className="px-4">
-        <p className="text-xl font-semibold">Project: {projectName}</p>
-        <div className="flex items-center gap-3 my-4">
-          <select
-            value={newColumn}
-            onChange={(e) => setNewColumn(e.target.value)}
-            className="border py-2 px-1 rounded"
-          >
-            <option value="">Select Column</option>
-            {["in review", "testing"].map((column) => (
-              <option key={column} value={column}>
-                {column.charAt(0).toUpperCase() + column.slice(1)}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={addColumn}
-            className="bg-[#ffe7ae] text-xl text-black px-3 py-2 rounded"
-          >
-            +
-          </button>
-          <button
-            onClick={() => setOpenInviteMembers(true)}
-            className=" bg-[#ffe7ae] text-black px-3 py-2 rounded"
-          >
-            Invite Members
-          </button>
-          <div className=" text-black px-3 py-2 rounded border capitalize">
-            Members:{" "}
-            {members && members.map((member) => member.firstName).join(", ")}
+    <div className="min-h-[65.6vh] dark:bg-slate-700 flex flex-col">
+      <div className="px-4 mt-4">
+        <p className="text-xl font-semibold dark:text-gray-50">
+          Project: {projectName}
+        </p>
+        <div className="flex md:flex-row md:gap-14 flex-col my-4">
+          <div className="flex w-full md:w-72 gap-2">
+            <select
+              value={newColumn}
+              onChange={(e) => setNewColumn(e.target.value)}
+              className="border py-2 px-1 rounded w-full"
+            >
+              <option value="">Select Column</option>
+              {["in review", "testing"].map((column) => (
+                <option key={column} value={column}>
+                  {column.charAt(0).toUpperCase() + column.slice(1)}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={addColumn}
+              className="bg-[#ffe7ae] dark:bg-gray-50 text-xl text-black px-3 py-2 rounded"
+            >
+              +
+            </button>
+          </div>
+          <div className=" flex flex-col md:flex-row md:ml-0 gap-2 mt-2">
+            <button
+              onClick={() => setOpenInviteMembers(true)}
+              className=" px-3 py-2 bg-[#ffe7ae] dark:bg-gray-50 text-black rounded"
+            >
+              Invite Members
+            </button>
+            <div className=" text-black px-3 py-2 dark:bg-gray-50 rounded border capitalize">
+              Members:{" "}
+              {members && members.map((member) => member.firstName).join(", ")}
+            </div>
           </div>
         </div>
       </div>
@@ -293,13 +301,13 @@ const Board = () => {
         {sortColumns(columns).map((status) => (
           <div
             key={status}
-            className="bg-[#FFDF92] shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg relative"
+            className="bg-[#FFDF92] dark:bg-gray-100 shadow-md min-h-[500px] w-[300px] flex-shrink-0 mx-4 p-4 rounded-lg relative"
           >
             <h2 className="text-xl font-[550] mb-2 capitalize">{status}</h2>
             {status === "To Do" && (
               <button
                 onClick={() => openAddTask(status)}
-                className="bg-[#FFDF92] text-black text-2xl font-semibold py-2 rounded mb-2 absolute top-3 right-6"
+                className="bg-transparent text-black text-2xl font-semibold py-2 rounded mb-2 absolute top-3 right-6"
               >
                 +
               </button>
