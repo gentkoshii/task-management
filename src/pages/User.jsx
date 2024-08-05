@@ -15,7 +15,7 @@ const User = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const navigate = useNavigate();
-  const { darkMode, setDarkMode } = useTheme();
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     getUserProfile();
@@ -53,22 +53,26 @@ const User = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const sidebarBgClass = darkMode
+    ? "bg-gray-800 text-gray-200"
+    : "bg-[#FFDF92] text-black";
+  const linkBgClass = darkMode ? "bg-gray-700" : "bg-[#fff2d3]";
+  const linkTextClass = darkMode ? "text-white" : "text-black";
+  const containerBgClass = darkMode ? "bg-slate-900" : "bg-white";
+  const buttonBgClass = darkMode ? "bg-slate-400" : "bg-[#FFDF92]";
+
   return (
-    <div
-      className={`flex flex-col py-8 px-6 ${
-        darkMode ? "bg-slate-900" : "bg-white"
-      }`}
-    >
+    <div className={`flex flex-col py-8 px-6 ${containerBgClass}`}>
       <div className="flex w-full flex-col md:flex-row justify-center gap-2 md:gap-14">
         {/* Sidebar */}
         <button
-          className="absolute top-[4.5vh] left-[36px] md:hidden bg-[#FFDF92]  p-2 rounded-md"
+          className={`absolute top-[4.5vh] left-[36px] md:hidden ${buttonBgClass} p-2 rounded-md`}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <img src="hide.png" alt="Menu" className="h-6 w-6" />
         </button>
         <div
-          className={`flex md:w-18 lg:w-[25vw] w-full bg-[#FFDF92] border-1 py-5 px-8 h-full rounded-lg flex-col justify-between gap-6  ${
+          className={`flex md:w-18 lg:w-[25vw] w-full ${sidebarBgClass} border-1 py-5 px-8 h-full rounded-lg flex-col justify-between gap-6 ${
             isSidebarOpen ? "flex" : "hidden "
           } md:flex`}
         >
@@ -83,20 +87,16 @@ const User = () => {
           </div>
           <div className="flex flex-col py-24 gap-1">
             <Link
-              className={`text-md font-semibold text-black no-underline hover:translate-x-[2px] pl-6 ${
-                activeLink === "dashboard"
-                  ? "bg-[#fff2d3] w-full rounded-md"
-                  : ""
+              className={`text-md font-semibold no-underline hover:translate-x-[2px] pl-6 ${linkTextClass} ${
+                activeLink === "dashboard" ? `${linkBgClass} w-full rounded-md` : ""
               }`}
               onClick={() => setActiveLink("dashboard")}
             >
               Dashboard
             </Link>
             <Link
-              className={`text-md font-semibold text-black no-underline hover:translate-x-[2px] pl-6 ${
-                activeLink === "projects"
-                  ? "bg-[#fff2d3] w-full rounded-md"
-                  : ""
+              className={`text-md font-semibold no-underline hover:translate-x-[2px] pl-6 ${linkTextClass} ${
+                activeLink === "projects" ? `${linkBgClass} w-full rounded-md` : ""
               }`}
               onClick={() => setActiveLink("projects")}
             >
@@ -105,22 +105,26 @@ const User = () => {
           </div>
           <div>
             <button onClick={handleLogout} className="flex gap-2">
+            {darkMode ? (
               <img
-                src="logout.png"
+                src="logout-white.png"
                 alt="logout"
                 className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
-              />
+              /> 
+          ) : (
+            <img
+            src="logout.png"
+            alt="logout"
+            className="h-6 w-6 cursor-pointer hover:translate-x-[2px]"
+          />
+          )}
               Sign Out
             </button>
           </div>
         </div>
 
         {/* Main Content */}
-        <div
-          className={`w-full flex rounded-md border-1 ${
-            darkMode ? "bg-slate-900" : "bg-white"
-          }`}
-        >
+        <div className={`w-full flex rounded-md border-1 ${containerBgClass}`}>
           {activeLink === "dashboard" && <Dashboard />}
           {activeLink === "projects" && <Projects />}
         </div>

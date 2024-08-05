@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddProject from "../../assets/Modals/AddProject";
+import { useTheme } from "../../context/ThemeContext";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDescription, setNewProjectDescription] = useState("");
+  const { darkMode } = useTheme();
 
   const navigate = useNavigate();
 
@@ -70,12 +72,19 @@ const Projects = () => {
     navigate(`/projects/${projectId}`);
   };
 
+  const buttonBgClass = darkMode ? "bg-slate-400" : "bg-[#FFDF92]";
+  const projectBgClass = darkMode
+    ? "bg-[linear-gradient(135deg,_#1F2937,_#497188_90%)] text-white"
+    : "bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)] text-black";
+    const deleteButtonClass = darkMode
+    ? "bg-slate-800 text-white hover:bg-slate-700"
+    : "bg-gray-400 text-white hover:bg-gray-500";
   return (
-    <div className="flex flex-col gap-10 p-10 dark:bg-slate-800">
+    <div className="flex flex-col gap-10 p-10 dark:bg-slate-900">
       <div>
         <button
+          className={`text-lg my-3 px-4 py-2 rounded hover:-translate-y-1 ${buttonBgClass} text-black`}
           onClick={() => setIsAddProjectOpen(true)}
-          className="bg-[#ffe3a0] text-lg text-black my-3 px-4 py-2 rounded hover:-translate-y-1"
         >
           Create a new Project
         </button>
@@ -95,19 +104,17 @@ const Projects = () => {
           <div
             key={project.id}
             onClick={() => handleClick(project.id)}
-            className=" bg-[linear-gradient(135deg,_#FFDF92,_#ffebbc_80%)]  h-[300px] p-4 rounded-lg shadow-md cursor-pointer hover:-translate-y-1"
+            className={`${projectBgClass} h-[300px] p-4 rounded-lg shadow-md cursor-pointer hover:-translate-y-1`}
           >
-            <div className="text-xl text-black font-semibold">
-              {project.name}
-            </div>
-            <div className="text-sm text-gray-600 my-3 ">
+            <div className="text-xl font-semibold">{project.name}</div>
+            <div className="text-sm my-3">
               {project.description}
             </div>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm mt-2">
               Created: {new Date(project.createdAt).toLocaleDateString()}
             </p>
             {project.updatedAt && (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm">
                 Last Updated: {new Date(project.updatedAt).toLocaleDateString()}
               </p>
             )}
@@ -116,7 +123,7 @@ const Projects = () => {
                 e.stopPropagation();
                 handleDeleteProject(project.id);
               }}
-              className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+              className={`mt-4 px-4 py-2 rounded ${deleteButtonClass}`}
             >
               Delete Project
             </button>
